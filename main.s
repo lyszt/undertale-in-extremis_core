@@ -65,5 +65,7 @@ estrategias: .word 0, 0
 
 # matrix dos pontos de vida dos jogadores
 players_health: .word 100, 100
+# matrix dos pontos de mana dos jogadores 
+players_mp: .word 100, 100
 
 .text 
