@@ -37,12 +37,11 @@ bar_mp_crit:    .string " MP: [* ] \n"
 
 # --- Mensagens de Escolha de Estrategia ---
 msg_titulo_estrategia:  .string " === SELECAO DE ESTRATEGIA === \n"
-msg_j1_estrategia:      .string "\n Escolha a estrategia do Jogador 1:\n"
-msg_j2_estrategia:      .string "\n Escolha a estrategia do Jogador 2:\n"
+msg_j1_estrategia:      .string "\n Escolhendo aleatoriamente a estrategia do Jogador 1...\n"
+msg_j2_estrategia:      .string "\n Escolhendo aleatoriamente a estrategia do Jogador 2...\n"
 msg_op_aleatoria:       .string "  [1] Aleatorio  (IA decide na hora)\n"
 msg_op_agressiva:       .string "  [2] Agressivo  (sempre ataca)\n"
 msg_op_defensiva:       .string "  [3] Defensivo  (prioriza defesa)\n"
-msg_prompt_escolha:     .string " > Sua escolha: "
 msg_estrategia_ok:      .string " Estrategia registrada!\n"
 
 # --- ALERTAS DE COMBATE E EVENTOS ---
@@ -85,23 +84,10 @@ players_mp: .word 100, 100
 .text 
 .globl _start
 _start:
-  # imprime: " !!! PREPARE PARA O COMBATE !!! "
-  la a1, event_alert
-  li a0, 4
-  ecall
 
-  # imprime: "========================================="
-  la a1, line_thick
-  li a0, 4
-  ecall
 
   # imprime: " === SELECAO DE ESTRATEGIA === "
   la a1, msg_titulo_estrategia
-  li a0, 4
-  ecall
-
-  # imprime: "========================================="
-  la a1, line_thick
   li a0, 4
   ecall
 
@@ -126,10 +112,7 @@ _start:
   li a0, 4
   ecall
 
-  # imprime: "> Sua escolha: "
-  la a1, msg_prompt_escolha
-  li a0, 4
-  ecall
+
 
   li a0, 5
   ecall                        # le inteiro -> a0
@@ -137,10 +120,7 @@ _start:
   la t0, estrategias
   sw a0, 0(t0)                 # salva estrategia do jogador 1
 
-  # imprime: "Estrategia registrada!"
-  la a1, msg_estrategia_ok
-  li a0, 4
-  ecall
+
 
   # imprime: "-----------------------------------------"
   la a1, line_thin
@@ -153,41 +133,16 @@ _start:
   li a0, 4
   ecall
 
-  # imprime: "[1] Aleatorio"
-  la a1, msg_op_aleatoria
-  li a0, 4
-  ecall
-
-  # imprime: "[2] Agressivo"
-  la a1, msg_op_agressiva
-  li a0, 4
-  ecall
-
-  # imprime: "[3] Defensivo"
-  la a1, msg_op_defensiva
-  li a0, 4
-  ecall
-
-  # imprime: "> Sua escolha: "
-  la a1, msg_prompt_escolha
-  li a0, 4
-  ecall
-
-  li a0, 5
-  ecall                        # le inteiro -> a0
-
   la t0, estrategias
   sw a0, 4(t0)                 # salva estrategia do jogador 2
 
-  # imprime: "Estrategia registrada!"
-  la a1, msg_estrategia_ok
+  
+  # imprime: " !!! PREPARE PARA O COMBATE !!! "
+  la a1, event_alert
   li a0, 4
   ecall
 
-  # imprime: "========================================="
-  la a1, line_thick
-  li a0, 4
-  ecall
 
   li a0, 10
   ecall
+
