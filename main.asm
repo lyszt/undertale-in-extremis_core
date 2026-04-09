@@ -44,6 +44,51 @@ msg_estrategia_ok:      .string " Estrategia registrada!\n"
 msg_j1_escolha:         .string " O jogador 1 escolheu: "
 msg_j2_escolha:         .string " O jogador 2 escolheu: "
 
+# --- ASCII ARTS DOS PERSONAGENS ---
+ascii_aleatorio:
+  .ascii "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣶⣶⣶⣶⣶⣶⣆⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠀⠀⠀⣿⠋⠁⠀⣀⠀⢹⣿⣿⣿⠀⢀⡀⠀⠉⢻⡇⠀⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠀⠀⠀⢹⣆⡀⠀⠉⠀⣾⡟⠙⣿⡄⠈⠁⠀⣀⣾⠁⠀⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠀⠀⠀⢠⣿⡟⢯⣭⣾⣿⣀⣀⣻⣿⣮⣽⠛⢿⣧⠀⠀⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠀⠀⠀⠸⣧⣄⠒⢠⣙⢛⡛⣛⣛⢛⡋⡄⣠⣴⡟⠀⠀⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⢀⣶⣦⡀⠙⠿⣷⣶⣭⣘⣃⣘⣃⣘⣥⣾⡿⠏⣡⣾⠟⠒⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠂⠈⠙⠛⢶⣄⠀⠀⠛⡛⠛⠋⣛⠛⠃⠀⢀⣠⡿⠃⠀⠀⢦⡀⠀⠀\n"
+  .ascii "⠀⠀⡠⠊⠀⠀⣴⠀⠀⠈⡟⠒⡤⠙⠿⠿⠁⠤⢶⠚⠉⠉⠀⢠⠁⠀⠀⠱⣄⠀\n"
+  .ascii "⠀⢠⠁⠀⠀⠀⣿⡀⣀⣀⡁⠤⡇⢰⣷⣶⡄⣴⢼⠀⠀⢀⣠⢿⠀⠀⠀⠀⢹⡄\n"
+  .ascii "⠰⢿⠀⠀⠀⢠⡉⠉⠀⠀⠀⡄⢺⢸⣿⣿⡇⡗⢺⢰⠈⠉⠀⠘⡆⠀⠀⠀⠀⡇\n"
+  .ascii "⠀⠈⠳⣄⡀⢸⡇⠀⠀⠀⠀⣡⢚⢸⣿⣿⠇⠗⣆⠆⠀⠀⠀⠀⡇⠀⠀⢀⡴⠃\n"
+  .ascii "⠀⠀⠀⠈⠃⠘⣷⣤⠀⠀⠀⢹⣾⣶⠒⠒⠀⢳⣧⣤⣄⣠⣄⣾⠃⢴⠆⠉⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⢉⠀⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠀⠀⢰⠀⢠⡟⠀⠀⠀⠀⢀⢄⠀⠀⠀⢸⡇⠀⠀⠨⡆⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠀⠀⡘⢀⣜⠇⠀⠀⠀⠀⢸⠸⡀⠀⠀⢸⣿⠀⠀⠀⢡⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠀⠀⡇⢸⣿⠀⠀⠀⠀⠠⡇⠀⡇⠀⠀⠈⣿⠀⠀⠀⢸⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⠀⠀⠙⠛⠋⠤⠤⠤⠤⠄⠁⠀⠁⠤⠄⠠⠿⠧⠄⠛⠛⠀⠀⠀⠀⠀\n"
+  .ascii "⠀⠀⠀⠀⢀⣴⣶⣦⣄⠲⣶⠀⠀⠀⠀⠀⠀⠀⢠⣷⣶⡶⢂⣠⣴⣶⣤⡀⠀⠀\n"
+  .string "⠀⠀⠀⠀⠸⠿⠿⠿⠿⠧⠠⠄⠀⠀⠀⠀⠀⠀⠤⠤⠤⠐⠿⠿⠿⠿⠿⠃⠀⠀\n\n"
+
+ascii_agressivo:
+  .ascii "⠀⠀⢀⣤⣶⣶⣶⣶⣶⣶⣶⣤⠀⠀⠀\n"
+  .ascii "⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣆⠀\n"
+  .ascii "⢰⣾⣿⠛⠉⠙⣿⠛⠛⠛⢿⣿⣿⣿⡀\n"
+  .ascii "⣾⣿⠉⠀⢸⡇⠀⠀⢸⡇⠀⣿⠿⢹⣿\n"
+  .ascii "⣿⣿⠀⠀⠈⢡⡀⣀⣬⠁⠀⢉⣴⣾⣿\n"
+  .ascii "⢿⡿⣿⣶⣖⣀⣉⠉⠀⣰⣶⣿⡿⢿⠿\n"
+  .ascii "⠘⠃⠙⠛⠛⢛⣯⣀⣀⣟⡛⠛⠇⠘⠀\n"
+  .ascii "⠀⠀⣤⠒⣶⢊⣛⢛⣛⢋⠛⣶⢢⡄⠀\n"
+  .ascii "⠀⢸⣸⣿⠀⠀⠀⠀⠀⠀⠀⢻⣇⣸⠀\n"
+  .ascii "⠀⢸⣭⣿⣾⣷⣿⣾⣷⣿⣿⣾⣯⣽⠀\n"
+  .ascii "⠀⠀⠀⣿⣿⣿⡟⠛⣿⣿⣿⣿⡇⠀⠀\n"
+  .string "⠀⠀⠀⠉⣭⣿⣏⠀⣿⣿⣿⣭⠁⠀⠀\n\n"
+
+ascii_defensivo:
+  .ascii "⢰⠑⠉⠉⠊⢆⠀⠀⠀⠀\n"
+  .ascii "⡇⡈⡤⢁⠀⠈⠑⠢⠴⢱\n"
+  .ascii "⡇⠈⠉⠁⠀⠀⠀⠀⠀⢸\n"
+  .ascii "⢇⠀⠀⠀⠀⠀⠀⠀⠀⡜\n"
+  .string "⠘⠔⠹⡠⠋⠹⡠⠛⠔⠁\n\n"
+
 # --- ALERTAS DE COMBATE E EVENTOS ---
 event_alert:    .string " !!! PREPARE PARA O COMBATE !!! \n"
 event_crit:     .string " >>> ACERTO CRITICO <<< \n"
@@ -112,6 +157,10 @@ _start:
   mv      a1, s1
   call    print_int
 
+  # Imprime a ASCII art baseada na escolha
+  mv      a1, s1
+  call    print_ascii
+
   la      t0, estrategias
   sw      s1, 0(t0)        # salva estrategia do jogador 1 (usando s1 para garantir o valor correto)
 
@@ -130,6 +179,10 @@ _start:
   
   mv      a1, s1
   call    print_int
+
+  # Imprime a ASCII art baseada na escolha
+  mv      a1, s1
+  call    print_ascii
 
   la      t0, estrategias
   sw      s1, 4(t0)        # salva estrategia do jogador 2
@@ -157,7 +210,7 @@ randomizer:
   slli    t1, t0, 5
   xor     t0, t0, t1
 
-  li      t1, 3            # Alterado para 3 para coincidir com as 3 opcoes do menu
+  li      t1, 3            
   remu    t0, t0, t1 
   addi    t0, t0, 1
     
@@ -171,6 +224,34 @@ print_int:
   
   # Nova linha para organizar o console
   la      a0, pad_nl
+  li      a7, 4
+  ecall
+  ret
+
+print_ascii:
+  # Supoe que a1 contém o numero da estrategia escolhida (1, 2 ou 3)
+  li      t1, 1
+  beq     a1, t1, draw_aleatorio
+  
+  li      t1, 2
+  beq     a1, t1, draw_agressivo
+  
+  # Se nao for 1 nem 2, é o 3 (Defensivo)
+  la      a0, ascii_defensivo
+  j       draw_finish
+
+draw_aleatorio:
+  la      a0, ascii_aleatorio
+  j       draw_finish
+
+draw_agressivo:
+  la      a0, ascii_agressivo
+
+draw_finish:
+  li      a7, 4
+  ecall
+
+  la      a0, bar_hp_full
   li      a7, 4
   ecall
   ret
