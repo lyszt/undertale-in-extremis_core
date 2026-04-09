@@ -116,6 +116,8 @@ pad_tab:        .string " "
 
 
 turn_message: .string ""
+clear_screen: .byte 27, 91, 50, 74, 27, 91, 72, 0
+
 player_turn:    .word   0
 estrategias:    .word   0, 0
 players_health: .word   100, 100
@@ -263,6 +265,11 @@ print_int:
 
 print_ascii:
   startF
+
+  la      a0, clear_screen
+  li      a7, 4
+  ecall
+
   # Supoe que a1 contém o numero da estrategia escolhida (1, 2 ou 3)
   li      t1, 1
   beq     a1, t1, draw_aleatorio
