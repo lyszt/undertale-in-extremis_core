@@ -117,6 +117,26 @@ players_health: .word   100, 100
 players_mp:     .word   100, 100
 seed:           .word   5
 
+# MACROS 
+
+.macro     startF
+    addi       sp, sp, -16
+    sw         ra, 12(sp)
+    sw         s0, 8(sp)
+    sw         s1, 4(sp)
+    sw         s2, 0(sp)
+    .end_macro
+
+    .macro     endF
+    lw         ra, 12(sp)
+    lw         s0, 8(sp)
+    lw         s1, 4(sp)
+    lw         s2, 0(sp)
+    addi       sp, sp, 16
+    .end_macro
+
+
+
   .text
   .globl  _start
 _start:
@@ -255,3 +275,16 @@ draw_finish:
   li      a7, 4
   ecall
   ret
+
+
+
+# game loop 
+
+game_loop:
+  startF 
+
+
+game_loop_end: 
+  endF 
+  ret 
+  
