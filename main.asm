@@ -164,8 +164,7 @@ _start:
   call    randomizer
 
   la      t0, estrategias
-  la t0, estrategias 
-  sw a1, 0(t0)
+  sw      a1, 0(t0)
 
   # Salva o valor em s1 antes de imprimir o texto e o numero
   mv      s1, a1
@@ -183,39 +182,39 @@ _start:
   mv      a1, s1
   call    print_ascii
 
-
-
 # --- Estrategia do Jogador 2 ---
   la      a0, msg_j2_estrategia
   li      a7, 4
   ecall
 
   call    randomizer
-  la t0, estrategias 
-  sw a1, 4(t0)
+  la      t0, estrategias 
+  sw      a1, 4(t0)
 
   # Imprime: " O jogador 2 escolheu: "
   la      a0, msg_j2_escolha
   li      a7, 4
   ecall
   
-  mv      a1, s1
+  # Preserva retorno em s1 para nao perder durante print_int
+  mv      s1, a1
+  
   call    print_int
 
   # Imprime a ASCII art baseada na escolha
   mv      a1, s1
   call    print_ascii
 
-  la      t0, estrategias
-  sw      s1, 4(t0)        # salva estrategia do jogador 2
-
 # imprime: " !!! PREPARE PARA O COMBATE !!! "
   la      a0, event_alert
   li      a7, 4
   ecall
 
+  call game_loop
+
   li      a7, 10
   ecall
+
 
 randomizer:
   startF
@@ -288,10 +287,87 @@ draw_finish:
 
 game_loop:
   startF 
-  la t0, player_turn
-  lw t0, 0(t0)
 
+  
+  la      t0, player_turn
+  lw      a0, 0(t0)
+
+  li t1, 1
+  addi a0, a0, 2
+  rem a0, t1, a0
+  sw a0, 0(t0)
+
+  call do_player_turn
+
+  la t0, players_health
+  lw t1, 0(t0)
+  lw t2, 4(t0)
+  
+  beq t1, x0, game_loop_end
+  beq t2, x0, game_loop_end
+  j game_loop
 
 game_loop_end: 
+  endF 
+  ret
+
+print_player_ascii:
+  startF
+  li      t1, 1
+  beq     a0, t1, print_p1_strat
+  
+  la      t0, estrategias
+  lw      a1, 4(t0)
+  j       p_ascii_branch
+  
+print_p1_strat:
+  la      t0, estrategias
+  lw      a1, 0(t0)
+  
+p_ascii_branch:
+  call    print_ascii
+  endF
+  ret
+
+detect_strategy: 
+  startF
+  # detects player strategy and returns on a0 
+  # receives player on a0 
+  li      t1, 1 
+  
+  beq     a0, t1, detect_player_one_st
+  j       detect_player_two_st
+
+detect_player_one_st:
+  la      t0, estrategias
+  lw      a0, 0(t0)
+  j       detect_end
+  
+detect_player_two_st:
+  la      t0, estrategias
+  lw      a0, 4(t0)
+  
+detect_end: 
+  endF 
+  ret 
+  
+do_player_turn:
+  # recebe estrategia em a0 
+  startF 
+  li      t1, 1
+  
+
+  beq     a0, t1, do_player_1_turn 
+  j       do_player_2_turn
+
+do_player_1_turn:
+  li      a0, 0
+  call    print_player_ascii
+
+do_player_2_turn:
+  li      a0, 1 
+  call    print_player_ascii
+
+do_end_turn: 
   endF 
   ret
