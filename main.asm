@@ -162,7 +162,11 @@ _start:
   ecall
 
   call    randomizer
-  
+
+  la      t0, estrategias
+  la t0, estrategias 
+  sw a1, 0(t0)
+
   # Salva o valor em s1 antes de imprimir o texto e o numero
   mv      s1, a1
   
@@ -179,8 +183,7 @@ _start:
   mv      a1, s1
   call    print_ascii
 
-  la      t0, estrategias
-  sw      s1, 0(t0)        # salva estrategia do jogador 1 (usando s1 para garantir o valor correto)
+
 
 # --- Estrategia do Jogador 2 ---
   la      a0, msg_j2_estrategia
@@ -188,7 +191,8 @@ _start:
   ecall
 
   call    randomizer
-  mv      s1, a1           # Salva novo valor
+  la t0, estrategias 
+  sw a1, 4(t0)
 
   # Imprime: " O jogador 2 escolheu: "
   la      a0, msg_j2_escolha
@@ -284,6 +288,9 @@ draw_finish:
 
 game_loop:
   startF 
+  la t0, player_turn
+  lw t0, 0(t0)
+
 
 game_loop_end: 
   endF 
