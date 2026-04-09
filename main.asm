@@ -31,6 +31,9 @@ bar_mp_full:    .string " MP: [**********] \n"
 bar_mp_half:    .string " MP: [***** ] \n"
 bar_mp_crit:    .string " MP: [* ] \n"
 
+action_interface: .string "[ ATTACK ]  [  SKILL  ]  [  DEFEND  ]\n"
+
+
 # --- Mensagens de Escolha de Estrategia ---
 msg_titulo_estrategia:  .string " === SELECAO DE ESTRATEGIA === \n"
 msg_j1_estrategia:      .string "\n Escolhendo aleatoriamente a estrategia do Jogador 1...\n"
@@ -100,9 +103,9 @@ event_interrogation: .string "?"
 event_surprise: .string "?!!"
 
 # --- CAIXAS DE TEXTO E DIALOGO ---
-box_top:        .string " +---------------------------------------+ \n | "
-box_mid:        .string " | \n | "
-box_bot:        .string " | \n +---------------------------------------+ \n"
+box_top:        .string " +---------------------------------------+ \n"
+box_mid:        .string " |                                       | \n"
+box_bot:        .string " +---------------------------------------+ \n"
 
 # --- PONTEIROS E ESPACAMENTO ---
 ui_arrow:       .string " > "
@@ -111,6 +114,8 @@ pad_nl:         .string "\n"
 pad_dnl:        .string "\n\n"
 pad_tab:        .string " "
 
+
+turn_message: .string ""
 player_turn:    .word   0
 estrategias:    .word   0, 0
 players_health: .word   100, 100
@@ -217,11 +222,15 @@ _start:
 
 
 randomizer:
+  # recebe o range maximo em a0
   startF
+
+  mv a0, t3
+
   la      t3, seed
   li      a7, 30
   ecall
-
+  
   sw      a0, 0(t3)
   lw      t0, 0(t3)
 
@@ -232,8 +241,7 @@ randomizer:
   slli    t1, t0, 5
   xor     t0, t0, t1
 
-  li      t1, 3            
-  remu    t0, t0, t1 
+  remu    t0, t0, t3 
   addi    t0, t0, 1
     
   mv      a1, t0
@@ -280,8 +288,41 @@ draw_finish:
   la      a0, bar_hp_full
   li      a7, 4
   ecall
+
+  call draw_ui_box
+
   endF
   ret
+
+draw_ui_box:
+  startF
+  la a0, box_top
+  li a7, 4 
+  ecall 
+
+  la a0, box_mid
+  li a7, 4 
+  ecall 
+
+  # receberia um texto aqui 
+  
+  la a0, box_mid
+  li a7, 4
+  ecall 
+
+  la a0, box_bot
+  li a7, 4
+  ecall 
+
+  la a0, action_interface
+  li a7, 4
+  ecall 
+
+  endF
+  ret
+
+
+
 
 # game loop 
 
@@ -363,11 +404,26 @@ do_player_turn:
 do_player_1_turn:
   li      a0, 0
   call    print_player_ascii
+  j do_turn_action
 
 do_player_2_turn:
   li      a0, 1 
   call    print_player_ascii
+  j do_turn_action
+
+do_turn_action: 
+  call calculate_success
+
 
 do_end_turn: 
   endF 
   ret
+
+calculate_success:
+  startF
+  # 1d20, ação crítica se 20  
+  li a0, 20
+  call randomizer
+  # se falha ou não a a ação feita
+  endF 
+  ret 
