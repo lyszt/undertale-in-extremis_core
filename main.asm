@@ -135,8 +135,6 @@ seed:           .word   5
     addi       sp, sp, 16
     .end_macro
 
-
-
   .text
   .globl  _start
 _start:
@@ -216,6 +214,7 @@ _start:
   ecall
 
 randomizer:
+  startF
   la      t3, seed
   li      a7, 30
   ecall
@@ -235,10 +234,12 @@ randomizer:
   addi    t0, t0, 1
     
   mv      a1, t0
+  endF
   ret
 
 print_int:
-  mv      a0, a1           
+  startF
+  mv      a0, a1            
   li      a7, 1
   ecall
   
@@ -246,9 +247,11 @@ print_int:
   la      a0, pad_nl
   li      a7, 4
   ecall
+  endF
   ret
 
 print_ascii:
+  startF
   # Supoe que a1 contém o numero da estrategia escolhida (1, 2 ou 3)
   li      t1, 1
   beq     a1, t1, draw_aleatorio
@@ -274,17 +277,14 @@ draw_finish:
   la      a0, bar_hp_full
   li      a7, 4
   ecall
+  endF
   ret
-
-
 
 # game loop 
 
 game_loop:
   startF 
 
-
 game_loop_end: 
   endF 
-  ret 
-  
+  ret
