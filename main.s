@@ -112,10 +112,8 @@ _start:
   li a0, 4
   ecall
 
-
-
-  li a0, 5
-  ecall                        # le inteiro -> a0
+  call randomizer
+  call print_int
 
   la t0, estrategias
   sw a0, 0(t0)                 # salva estrategia do jogador 1
@@ -146,3 +144,32 @@ _start:
   li a0, 10
   ecall
 
+
+
+
+randomizer:
+	# algoritmo popular de randomização que usa bitshift
+	# xorshift
+	li t0, 5
+	xor t0, t0, t1
+
+	slli t1, t0, 13
+	xor t0, t0, t1
+
+	srli t1, t0, 17
+	xor t0, t0, t1
+
+	slli t1, t0, 5
+	xor t0, t0, t1
+
+	li t1, 5
+
+	rem t0, t0, t1
+	mv a1, t0
+	ret
+
+print_int:
+	# supoe que há um dado em a1
+	li a0, 1
+	ecall 
+	ret
