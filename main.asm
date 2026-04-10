@@ -23,13 +23,13 @@ menu_magic:     .string " [1] MAGIA [2] FUGIR \n"
 menu_nav:       .string " [N] NORTE [S] SUL [L] LESTE [O] OESTE\n"
 
 # --- BARRAS DE STATUS ---
-bar_hp_full:    .string " HP: [##########] \n"
-bar_hp_half:    .string " HP: [##### ] \n"
-bar_hp_crit:    .string " HP: [# ] \n"
+bar_hp_full:    .string " HP: [##########] "
+bar_hp_half:    .string " HP: [##### ] "
+bar_hp_crit:    .string " HP: [# ] "
 
-bar_mp_full:    .string " MP: [**********] \n"
-bar_mp_half:    .string " MP: [***** ] \n"
-bar_mp_crit:    .string " MP: [* ] \n"
+bar_mp_full:    .string " MP: [**********] "
+bar_mp_half:    .string " MP: [***** ] "
+bar_mp_crit:    .string " MP: [* ] "
 
 action_interface: .string "[ ATTACK ]  [  SKILL  ]  [  DEFEND  ]\n"
 
@@ -115,7 +115,10 @@ pad_dnl:        .string "\n\n"
 pad_tab:        .string " "
 
 
+line_break: .string "\n"
+health_max: .string "  / 100 \n"
 turn_message: .string ""
+
 clear_screen: .byte 27, 91, 50, 74, 27, 91, 72, 0
 
 player_turn:    .word   0
@@ -239,7 +242,7 @@ randomizer:
   # recebe o range maximo em a0
   startF
 
-  mv      s0, a0        # salva o range antes do ecall sobrescrever a0
+  mv      s0, a0
   la t3, seed
   lw      t0, 0(t3)
 
@@ -250,7 +253,7 @@ randomizer:
   slli    t1, t0, 5
   xor     t0, t0, t1
 
-  remu    t0, t0, s0   
+  remu    t0, t0, s0
   addi    t0, t0, 1
   
   la t4, current_time
@@ -278,6 +281,7 @@ print_int:
 
 print_ascii:
   startF
+  mv      s1, a0
 
   la      a0, clear_screen
   li      a7, 4
@@ -286,10 +290,10 @@ print_ascii:
   # Supoe que a1 contém o numero da estrategia escolhida (1, 2 ou 3)
   li      t1, 1
   beq     a1, t1, draw_aleatorio
-  
+
   li      t1, 2
   beq     a1, t1, draw_agressivo
-  
+
   # Se nao for 1 nem 2, é o 3 (Defensivo)
   la      a0, ascii_defensivo
   j       draw_finish
@@ -300,16 +304,59 @@ draw_aleatorio:
 
 draw_agressivo:
   la      a0, ascii_agressivo
+  j       draw_finish
 
 draw_finish:
   li      a7, 4
   ecall
 
+  mv      a0, s1
+  call    draw_health
+
+  call    draw_ui_box
+
+  endF
+  ret
+
+draw_health:
+  # recebe o jogador em a0 (0 = jogador 1, 1 = jogador 2)
+  startF
+  mv      s0, a0
+
+  la      t0, players_health
+  beq     s0, x0, draw_health_player_1
+  lw      s1, 4(t0)
+  j       draw_health_bar
+
+draw_health_player_1:
+  lw      s1, 0(t0)
+
+draw_health_bar:
+  li      t1, 50
+  blt     s1, t1, draw_health_half
   la      a0, bar_hp_full
+  j       draw_health_end
+
+draw_health_half:
+  li      t1, 10
+  blt     s1, t1, draw_health_crit
+  la      a0, bar_hp_half
+  j       draw_health_end
+
+draw_health_crit:
+  la      a0, bar_hp_crit
+
+draw_health_end:
   li      a7, 4
   ecall
 
-  call draw_ui_box
+  mv      a0, s1
+  li      a7, 1
+  ecall
+
+  la      a0, health_max
+  li      a7, 4
+  ecall
 
   endF
   ret
@@ -433,6 +480,7 @@ do_player_2_turn:
 
 do_turn_action: 
   call calculate_success
+
 
 
 do_end_turn: 
