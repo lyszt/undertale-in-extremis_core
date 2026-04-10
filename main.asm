@@ -123,6 +123,7 @@ estrategias:    .word   0, 0
 players_health: .word   100, 100
 players_mp:     .word   100, 100
 seed:           .word   5
+current_time: .word 0
 
 # MACROS 
 
@@ -145,6 +146,14 @@ seed:           .word   5
   .text
   .globl  _start
 _start:
+  # pega o tempo atual pra usar no gerador de numero aleatorio
+  la      t3, seed
+  la t4, current_time
+  li      a7, 30
+  ecall
+
+  sw      a0, 0(t3)
+  sw a0, 0(t4)
 
   # imprime: " === SELECAO DE ESTRATEGIA === "
   la      a0, msg_titulo_estrategia
@@ -168,6 +177,7 @@ _start:
   li      a7, 4
   ecall
 
+  li a0, 3
   call    randomizer
 
   la      t0, estrategias
@@ -194,7 +204,9 @@ _start:
   li      a7, 4
   ecall
 
+  li a0, 3
   call    randomizer
+
   la      t0, estrategias 
   sw      a1, 4(t0)
 
@@ -227,13 +239,8 @@ randomizer:
   # recebe o range maximo em a0
   startF
 
-  mv a0, t3
-
-  la      t3, seed
-  li      a7, 30
-  ecall
-  
-  sw      a0, 0(t3)
+  mv      s0, a0        # salva o range antes do ecall sobrescrever a0
+  la t3, seed
   lw      t0, 0(t3)
 
   slli    t1, t0, 13
@@ -243,10 +250,16 @@ randomizer:
   slli    t1, t0, 5
   xor     t0, t0, t1
 
-  remu    t0, t0, t3 
+  remu    t0, t0, s0   
   addi    t0, t0, 1
-    
+  
+  la t4, current_time
+  lw      t5, 0(t4)
+
+  mul t5, t5, t0 
+  sw t5, 0(t3)
   mv      a1, t0
+  
   endF
   ret
 
