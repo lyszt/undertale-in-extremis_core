@@ -3,26 +3,26 @@
 
   .data
 
-# --- DIVISORES ---
+# DIVISORES
 deco_vine:      .string " ~<>-~<>-~<>-~<>-~<>-~<>-~<>-~<>-~<>-~<>-~ \n"
 deco_banana:    .string " \_/> \_/> \_/> \_/> \_/> \_/> \_/> \n"
 deco_leaves:    .string " \|/ \|/ \|/ \|/ \|/ \|/ \|/ \n"
 deco_monkey:    .string " @(o.o)@ @(o.o)@ @(o.o)@ @(o.o)@ \n"
 
-# --- SEPARADORES ---
+# SEPARADORES
 line_thin:      .string " ----------------------------------------- \n"
 line_thick:     .string " ========================================= \n"
 line_double:    .string " ========================================= \n"
 line_dot:       .string " ......................................... \n"
 
-# --- MENUS DE ACAO ---
+# MENUS DE ACAO
 menu_yn:        .string " [ S ] SIM [ N ] NAO \n"
 menu_continue:  .string " [ PRESSIONE QUALQUER TECLA ] \n"
 menu_combat:    .string " [1] ATACAR [2] DEFENDER [3] ITEM \n"
 menu_magic:     .string " [1] MAGIA [2] FUGIR \n"
 menu_nav:       .string " [N] NORTE [S] SUL [L] LESTE [O] OESTE\n"
 
-# --- BARRAS DE STATUS ---
+# BARRAS DE STATUS
 bar_hp_full:    .string " HP: [##########] "
 bar_hp_half:    .string " HP: [##### ] "
 bar_hp_crit:    .string " HP: [# ] "
@@ -34,7 +34,7 @@ bar_mp_crit:    .string " MP: [* ] "
 action_interface: .string "[ ATTACK ]  [  SKILL  ]  [  DEFEND  ]\n"
 
 
-# --- Mensagens de Escolha de Estrategia ---
+# Mensagens de Escolha de Estrategia
 msg_titulo_estrategia:  .string " === SELECAO DE ESTRATEGIA === \n"
 msg_j1_estrategia:      .string "\n Escolhendo aleatoriamente a estrategia do Jogador 1...\n"
 msg_j2_estrategia:      .string "\n Escolhendo aleatoriamente a estrategia do Jogador 2...\n"
@@ -43,7 +43,7 @@ msg_op_agressiva:       .string " [2] Agressivo (sempre ataca)\n"
 msg_op_defensiva:       .string " [3] Defensivo (prioriza defesa)\n"
 msg_estrategia_ok:      .string " Estrategia registrada!\n"
 
-# --- NOVAS MENSAGENS DE PREFIXO ---
+# NOVAS MENSAGENS DE PREFIXO
 msg_j1_escolha:         .string " O jogador 1 escolheu: "
 msg_j2_escolha:         .string " O jogador 2 escolheu: "
 
@@ -267,7 +267,7 @@ ascii_defensivo_idle_5:
   .string "⠘⠔⠹⡠⠋⠹⡠⠛⠔⠁\n\n"
 
 
- # --- ALERTAS DE COMBATE E EVENTOS ---
+ # ALERTAS DE COMBATE E EVENTOS
 event_alert:    .string " !!! PREPARE PARA O COMBATE !!! \n"
 event_crit:     .string " >>> ACERTO CRITICO <<< \n"
 event_miss:     .string " ... o ataque errou ... \n"
@@ -277,12 +277,12 @@ event_exclamation: .string "!!!"
 event_interrogation: .string "?"
 event_surprise: .string "?!!"
 
-# --- CAIXAS DE TEXTO E DIALOGO ---
+# CAIXAS DE TEXTO E DIALOGO
 box_top:        .string " +---------------------------------------+ \n"
 box_mid:        .string " |                                       | \n"
 box_bot:        .string " +---------------------------------------+ \n"
 
-# --- PONTEIROS E ESPACAMENTO ---
+# PONTEIROS E ESPACAMENTO
 ui_arrow:       .string " > "
 ui_dot:         .string " * "
 pad_nl:         .string "\n"
@@ -360,7 +360,7 @@ _start:
   li      a7, 4
   ecall
 
-# --- Estrategia do Jogador 1 ---
+# Estrategia do Jogador 1
   la      a0, msg_j1_estrategia
   li      a7, 4
   ecall
@@ -399,7 +399,7 @@ _start:
   mv      a1, s1
   call    print_ascii
 
-# --- Estrategia do Jogador 2 ---
+# Estrategia do Jogador 2
   la      a0, msg_j2_estrategia
   li      a7, 4
   ecall
@@ -479,6 +479,10 @@ print_int:
 print_ascii:
   startF
   mv      s1, a0
+
+  li a0, 100
+  li a7, 32 
+  ecall 
 
   la      a0, clear_screen
   li      a7, 4
