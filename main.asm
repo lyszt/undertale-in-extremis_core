@@ -582,16 +582,14 @@ draw_ui_box:
 game_loop:
   startF 
 
-  
+game_loop_start:
+  call do_player_turn
+
   la      t0, player_turn
   lw      a0, 0(t0)
-
-  li t1, 1
-  addi a0, a0, 2
-  rem a0, t1, a0
-  sw a0, 0(t0)
-
-  call do_player_turn
+  # exclusive OR immediate 
+  xori    a0, a0, 1
+  sw      a0, 0(t0)
 
   la t0, players_health
   lw t1, 0(t0)
