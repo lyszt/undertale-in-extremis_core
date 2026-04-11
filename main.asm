@@ -237,7 +237,7 @@ ascii_defensivo_idle_5:
   .string "⠘⠔⠹⡠⠋⠹⡠⠛⠔⠁\n\n"
 
 
- # ALERTAS DE COMBATE E EVENTOS
+ # TEXTOS 
 event_alert:    .string " !!! PREPARE PARA O COMBATE !!! \n"
 event_crit:     .string " >>> ACERTO CRITICO <<< \n"
 event_miss:     .string " ... o ataque errou ... \n"
@@ -246,6 +246,9 @@ event_hit:      .string " Voce ataca "
 event_exclamation: .string "!!!"
 event_interrogation: .string "?"
 event_surprise: .string "?!!"
+
+player_one_title: .string " JOGADOR 1 "
+player_two_title: .string " JOGADOR 2 "
 
 # CAIXAS DE TEXTO E DIALOGO
 box_top:        .string " +---------------------------------------+ \n"
@@ -511,10 +514,20 @@ draw_health:
 
   la      t0, players_health
   beq     s0, x0, draw_health_player_1
+  
+  la a0, player_two_title
+  li a7, 4 
+  ecall 
+
+
   lw      s1, 4(t0)
   j       draw_health_bar
 
 draw_health_player_1:
+  la a0, player_one_title
+  li a7, 4 
+  ecall 
+
   lw      s1, 0(t0)
 
 draw_health_bar:
