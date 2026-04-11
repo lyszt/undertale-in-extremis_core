@@ -605,6 +605,59 @@ game_loop_end:
   endF 
   ret
 
+do_attack:
+	startF
+	la t0, player_turn
+	lw s1, 0(t0)
+	
+	# isso vai ser usado pra saber sempre qual jogador é sem precisar de branch 
+	mv s2, s1 
+	li t2, 4 
+	mul s2, s1, t2
+	# temos um index aqui, podemos usar nos ataques
+
+	# 1d5 de dano 
+	li a0, 5 
+	call randomizer
+	mv a0, s0 
+	# adicionamos 1 pro ataque não dar 0 de dano (erro)
+	addi s0, s0, 1
+	call calculate_success
+	# caso d20 > 10, acertamos. se não, erramos. se 20, critico
+
+	la t3, players_health
+	lw t0, 0(t3)
+
+	li t1, 20 
+	beq a0, t1, do_attack_crit
+	li t1, 10 
+	bge a0, t1, do_attack_normal
+	j do_attack_fail
+
+do_attack_fail: 
+	endF
+	ret
+do_attack_crit:
+	# dobra o ataque 
+	li t3, 2
+	
+	mul s0, s0, t3
+	sub t0, t0, s0
+	la t1, players_health
+	add t2, t1, s2 
+	sw t0, 0(t2)
+	endF 
+	ret 
+
+do_attack_normal:
+	sub t0, t0, s0
+	la t1, players_health
+	add t2, t1, s2 
+	sw t0, 0(t2)
+	endF 
+	ret 
+
+
 print_player_ascii:
   startF
   li      t1, 1
@@ -665,8 +718,7 @@ do_player_2_turn:
   j do_turn_action
 
 do_turn_action: 
-  call calculate_success
-
+	call do_attack
 
 
 do_end_turn: 
