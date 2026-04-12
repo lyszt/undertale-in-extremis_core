@@ -251,13 +251,17 @@ player_two_title: .string " JOGADOR 2 "
 
 current_state: .word 0
 
-attack: .string "     Tentou fazer um ataque básico! \n\n"
-attack_crit: .string "     O ATAQUE FOI CRÍTICO!             \n\n"
-attack_success: .string "     ACERTOU!                         \n"
+attack: .string "     Tentou fazer um ataque básico! "
+attack_crit: .string "     O ATAQUE FOI CRÍTICO!             "
+attack_success: .string "     ACERTOU!                         "
 
-attack_fail: .string "           ERROU!                     \n"
-defend: .string "          Tentou defender!                 \n"
-defend_crit: .string "Defendeu e realizou um contra ataque!  \n"
+attack_fail: .string "           ERROU!                     "
+
+defense: .string "          Tentou defender!                 "
+defense_crit: .string "Defendeu e realizou um contra ataque!  "
+defense_fail: .string "Tentou defender mas falhou! O inimigo recebe um bonus! "
+defense_success: .string "      DEFENDEU!                      "
+
 
 damage_log: .string  "       Dano causado (hp): "
 newline:    .string  "\n"
@@ -289,6 +293,7 @@ seed:           .word   5
 current_time:   .word   0
 current_frame:  .word   0
 last_damage:    .word   0
+defense_fail_bonus: .word 0 
 
 idle_aleatorio_frames:
   .word ascii_aleatorio_idle_1
@@ -435,7 +440,10 @@ randomizer:
   xor     t0, t0, t1
   slli    t1, t0, 5
   xor     t0, t0, t1
-  # t0 = xorshift bruto, salva antes do mod para usar na seed
+  # t0 = xorshift bruto
+
+  remu    t1, t0, s0   # remu trata t0 como unsigned, evitando resultado negativo
+  addi    t1, t1, 1
 
   # atualiza current_time com o tempo real para aumentar entropia
   la      t4, current_time
@@ -449,9 +457,7 @@ randomizer:
   xor     t5, t5, t0
   sw      t5, 0(t3)
 
-  remu    t0, t0, s0
-  addi    t0, t0, 1
-  mv      a1, t0
+  mv      a1, t1
   
   endF
   ret
@@ -519,7 +525,9 @@ draw_finish:
   li      a7, 4
   ecall
 
-  mv      a0, s1
+  li      a0, 0
+  call    draw_health
+  li      a0, 1
   call    draw_health
 
   call    draw_ui_box
@@ -600,15 +608,19 @@ draw_ui_box:
   li a7, 4
   ecall
 
+  li a0, 1
+  call print_newlines
   # mensagem do turno, ou 3 newlines de padding se vazio
   la t0, current_state
   lw a0, 0(t0)
   beqz a0, state_empty
   li a7, 4
   ecall
+  li a0, 1
+  call print_newlines
   j state_done
 state_empty:
-  li a0, 2
+  li a0, 1
   call print_newlines
 state_done:
 
@@ -757,6 +769,95 @@ do_attack_normal:
 	sw t0, 0(t2)
 	endF
 	ret 
+
+do_defense:
+	startF
+
+  # current state mostra mensagem do jogador atacar
+  la t1, current_state
+  la t2, attack 
+  sw t2, 0(t1)
+
+	la t0, player_turn
+	lw s1, 0(t0)
+
+	# s2 = offset do atacante na memoria (indice do jogador atual * 4 bytes)
+	# jogador 0 fica no offset 0, jogador 1 fica no offset 4
+	li t2, 4
+	mul s2, s1, t2
+
+	# s3 = offset do inimigo (o oposto do atacante)
+	# xori inverte o bit menos significativo: 0 vira 1, 1 vira 0
+	# assim achamos o indice do jogador que vai RECEBER o dano
+	xori t4, s1, 1
+	# multiplicamos por 4 para obter o offset de memoria do inimigo
+	mul s3, t4, t2
+
+	# 1d5 de dano
+	li a0, 5
+	call randomizer
+	mv s0, a1
+	# adicionamos 1 pro ataque nao dar 0 de dano (erro)
+	addi s0, s0, 1
+	call calculate_success
+	# caso d20 > 10, acertamos. se nao, erramos. se 20, critico
+
+	# lemos a vida do INIMIGO usando o offset do inimigo (s3)
+	la t3, players_health
+	add t3, t3, s3
+	lw t0, 0(t3)
+
+	li t1, 20 
+	beq a1, t1, do_defense_crit
+	li t1, 10 
+	bge a1, t1, do_defense_normal
+	j do_defense_fail
+
+do_defense_fail: 
+  la t5, current_state
+  la t4, defense_fail 
+  sw t4, 0(t5)
+
+	endF
+	ret
+do_defense_crit:
+
+  la t5, current_state
+  la t4, defense_crit 
+  sw t4, 0(t5)
+
+	# dobra o ataque
+	li t3, 2
+	mul s0, s0, t3
+	sub t0, t0, s0
+
+	la t1, last_damage
+	sw s0, 0(t1)
+
+	la t1, players_health
+	add t2, t1, s3
+	sw t0, 0(t2)
+	endF
+	ret
+
+do_defense_normal:
+	la t5, current_state
+	la t4, defense_success
+	sw t4, 0(t5)
+
+	sub t0, t0, s0
+
+	la t1, last_damage
+	sw s0, 0(t1)
+
+	la t1, players_health
+	add t2, t1, s3
+	sw t0, 0(t2)
+	endF
+	ret 
+
+
+
 
 
 print_player_ascii:
