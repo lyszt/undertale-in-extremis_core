@@ -39,8 +39,6 @@ msg_titulo_estrategia:  .string " === SELECAO DE ESTRATEGIA === \n"
 msg_j1_estrategia:      .string "\n Escolhendo aleatoriamente a estrategia do Jogador 1...\n"
 msg_j2_estrategia:      .string "\n Escolhendo aleatoriamente a estrategia do Jogador 2...\n"
 msg_op_aleatoria:       .string " [1] Aleatorio (IA decide na hora)\n"
-msg_op_agressiva:       .string " [2] Agressivo (sempre ataca)\n"
-msg_op_defensiva:       .string " [3] Defensivo (prioriza defesa)\n"
 msg_estrategia_ok:      .string " Estrategia registrada!\n"
 
 # NOVAS MENSAGENS DE PREFIXO
@@ -294,6 +292,7 @@ current_time:   .word   0
 current_frame:  .word   0
 last_damage:    .word   0
 defense_fail_bonus: .word 0 
+is_defending: .word 0, 0 
 
 idle_aleatorio_frames:
   .word ascii_aleatorio_idle_1
@@ -360,15 +359,10 @@ _start:
   li      a7, 4
   ecall
 
-  la      a0, msg_op_agressiva
-  li      a7, 4
-  ecall
 
-  la      a0, msg_op_defensiva
-  li      a7, 4
-  ecall
-
-  li a0, 3
+  # 1 por enquanto, porque a estratégia agressiva e defensiva foi removida 
+  # será substituida por classes depois que eu implementar habilidades de classe 
+  li a0, 1 
   call    randomizer
 
   la      t0, estrategias
@@ -395,7 +389,7 @@ _start:
   li      a7, 4
   ecall
 
-  li a0, 3
+  li a0, 1
   call    randomizer
 
   la      t0, estrategias 
@@ -773,90 +767,22 @@ do_attack_normal:
 do_defense:
 	startF
 
-  # current state mostra mensagem do jogador atacar
+  # current state mostra mensagem do jogador ao defender 
   la t1, current_state
-  la t2, attack 
+  la t2, defense 
   sw t2, 0(t1)
-
+  
 	la t0, player_turn
 	lw s1, 0(t0)
+  li t1, 4 
+  mul s1, s1, t1 
 
-	# s2 = offset do atacante na memoria (indice do jogador atual * 4 bytes)
-	# jogador 0 fica no offset 0, jogador 1 fica no offset 4
-	li t2, 4
-	mul s2, s1, t2
+  la t1, is_defending
+  add t1, t1, s1 
 
-	# s3 = offset do inimigo (o oposto do atacante)
-	# xori inverte o bit menos significativo: 0 vira 1, 1 vira 0
-	# assim achamos o indice do jogador que vai RECEBER o dano
-	xori t4, s1, 1
-	# multiplicamos por 4 para obter o offset de memoria do inimigo
-	mul s3, t4, t2
-
-	# 1d5 de dano
-	li a0, 5
-	call randomizer
-	mv s0, a1
-	# adicionamos 1 pro ataque nao dar 0 de dano (erro)
-	addi s0, s0, 1
-	call calculate_success
-	# caso d20 > 10, acertamos. se nao, erramos. se 20, critico
-
-	# lemos a vida do INIMIGO usando o offset do inimigo (s3)
-	la t3, players_health
-	add t3, t3, s3
-	lw t0, 0(t3)
-
-	li t1, 20 
-	beq a1, t1, do_defense_crit
-	li t1, 10 
-	bge a1, t1, do_defense_normal
-	j do_defense_fail
-
-do_defense_fail: 
-  la t5, current_state
-  la t4, defense_fail 
-  sw t4, 0(t5)
-
-	endF
-	ret
-do_defense_crit:
-
-  la t5, current_state
-  la t4, defense_crit 
-  sw t4, 0(t5)
-
-	# dobra o ataque
-	li t3, 2
-	mul s0, s0, t3
-	sub t0, t0, s0
-
-	la t1, last_damage
-	sw s0, 0(t1)
-
-	la t1, players_health
-	add t2, t1, s3
-	sw t0, 0(t2)
-	endF
-	ret
-
-do_defense_normal:
-	la t5, current_state
-	la t4, defense_success
-	sw t4, 0(t5)
-
-	sub t0, t0, s0
-
-	la t1, last_damage
-	sw s0, 0(t1)
-
-	la t1, players_health
-	add t2, t1, s3
-	sw t0, 0(t2)
-	endF
-	ret 
-
-
+  li t2, 1 
+  sw t2, 0(t1)
+  
 
 
 
@@ -934,8 +860,16 @@ do_player_2_turn:
   j do_turn_action
 
 do_turn_action:
-	call do_attack
-
+  call decision 
+  li t1, 1 
+  beq t1, a0, do_turn_attack
+do_turn_attack:
+  call do_attack 
+  beq t1, a0, do_turn_defense
+  j do_turn_render_action
+do_turn_defense:
+  call do_defense
+do_turn_render_action:
 	# renderiza um frame completo com sprite + vida + resultado do ataque
 	la t0, player_turn
 	lw s4, 0(t0)       # salva o indice do jogador (0=j1, 1=j2)
@@ -947,6 +881,7 @@ do_turn_action:
 	li a0, 500
 	li a7, 32
 	ecall
+  j do_end_turn
 
 do_end_turn:
   endF 
@@ -960,3 +895,20 @@ calculate_success:
   # se falha ou não a a ação feita
   endF 
   ret 
+
+
+decision:
+  startF 
+  call detect_strategy
+
+  li t1, 1 
+  beq a0, t1, decision_random
+decision_random:
+  # there's only two possible decisions now so I'll leave it at that 
+  li a0, 2
+  call randomizer
+decision_end:
+  # returns decision in a0 (and accidentally in a1 as well)
+  mv a0, a1
+  endF 
+  ret
