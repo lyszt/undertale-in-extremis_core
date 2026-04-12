@@ -249,16 +249,19 @@ player_two_title: .string " JOGADOR 2 "
 
 current_state: .word 0
 
-attack: .string "     Tentou fazer um ataque básico! "
-attack_crit: .string "     O ATAQUE FOI CRÍTICO!             "
-attack_success: .string "     ACERTOU!                         "
+msg_jogador_1: .string " O jogador 1 "
+msg_jogador_2: .string " O jogador 2 "
 
-attack_fail: .string "           ERROU!                     "
+attack: .string "tentou fazer um ataque básico!\n"
+attack_crit: .string "o ataque foi crítico!\n"
+attack_success: .string "acertou!\n"
 
-defense: .string "          Tentou defender!                 "
-defense_crit: .string "Defendeu e realizou um contra ataque!  "
-defense_fail: .string "Tentou defender mas falhou! O inimigo recebe um bonus! "
-defense_success: .string "      DEFENDEU!                      "
+attack_fail: .string "errou!\n"
+
+defense: .string "tentou defender!\n"
+defense_crit: .string "defendeu e realizou um contra ataque!\n"
+defense_fail: .string "tentou defender mas falhou! o inimigo recebe um bonus!\n"
+defense_success: .string "defendeu!\n"
 
 
 damage_log: .string  "       Dano causado (hp): "
@@ -608,6 +611,20 @@ draw_ui_box:
   la t0, current_state
   lw a0, 0(t0)
   beqz a0, state_empty
+  # imprime prefixo "O jogador 1/2 " antes do estado
+  la t1, player_turn
+  lw t2, 0(t1)
+  beqz t2, print_prefix_j1
+  la a0, msg_jogador_2
+  j print_prefix_done
+print_prefix_j1:
+  la a0, msg_jogador_1
+print_prefix_done:
+  li a7, 4
+  ecall
+  # imprime o estado
+  la t0, current_state
+  lw a0, 0(t0)
   li a7, 4
   ecall
   li a0, 1
@@ -728,6 +745,16 @@ do_attack_fail:
 
 	endF
 	ret
+
+
+do_attack_defended: 
+  la t5, current_state
+  la t4, defense_success 
+  sw t4, 0(t5)
+
+	endF
+	ret
+
 do_attack_crit:
 
   la t5, current_state
@@ -749,9 +776,20 @@ do_attack_crit:
 	ret
 
 do_attack_normal:
+  la t5, is_defending 
+  add t5, t5, s3 
+  li t6, 1 
+  lw a5, 0(t5)
+  beq a5, t6, do_attack_check_is_defending
+
 	la t5, current_state
 	la t4, attack_success
 	sw t4, 0(t5)
+  
+  # O randomizer destruiu o t0 antigo, então pegamos da memoria de novo.
+  la t1, players_health
+  add t2, t1, s3
+  lw t0, 0(t2)
 
 	sub t0, t0, s0
 
@@ -763,6 +801,37 @@ do_attack_normal:
 	sw t0, 0(t2)
 	endF
 	ret 
+
+do_attack_check_is_defending:
+  li a5, 0
+  sw a5, 0(t5)
+  call calculate_success
+  # check if defense will succeed or not 
+  li t6, 20 
+  beq a1, t6, do_counter_attack
+  
+  li t6, 10 
+  bgt a1, t6, do_attack_defended
+
+  j do_attack_normal
+  
+do_counter_attack:
+	la t5, current_state
+	la t4, defense_crit
+	sw t4, 0(t5)
+  
+  # dano ao jogador contrário (Riposte!)
+	la t1, players_health
+  add t2, t1, s2        # aponta para a vida do atacante
+  lw t0, 0(t2)
+
+  sub t0, t0, s0
+	la t1, last_damage
+	sw s0, 0(t1)
+	sw t0, 0(t2)
+	endF
+	ret 
+
 
 do_defense:
 	startF
@@ -863,12 +932,15 @@ do_turn_action:
   call decision 
   li t1, 1 
   beq t1, a0, do_turn_attack
+  j do_turn_defense
+
 do_turn_attack:
   call do_attack 
-  beq t1, a0, do_turn_defense
   j do_turn_render_action
+
 do_turn_defense:
   call do_defense
+
 do_turn_render_action:
 	# renderiza um frame completo com sprite + vida + resultado do ataque
 	la t0, player_turn
