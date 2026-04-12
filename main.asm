@@ -242,8 +242,10 @@ event_exclamation: .string "!!!"
 event_interrogation: .string "?"
 event_surprise: .string "?!!"
 
-player_one_title: .string " JOGADOR 1 "
-player_two_title: .string " JOGADOR 2 "
+suffix_j1: .string " (Jogador 1) "
+suffix_j2: .string " (Jogador 2) "
+
+name_aleatorio: .string " Flowey"
 
 # TEXTOS PARA ESTADOS DE BATALHA 
 
@@ -538,22 +540,36 @@ draw_health:
   startF
   mv      s0, a0
 
+  # imprime o nome do personagem baseado na estrategia do jogador
+  la      t0, estrategias
+  beq     s0, x0, draw_health_load_j1_strat
+  lw      s2, 4(t0)           # estrategia do jogador 2
+  j       draw_health_print_name
+draw_health_load_j1_strat:
+  lw      s2, 0(t0)           # estrategia do jogador 1
+draw_health_print_name:
+  # por ora so existe aleatorio; adicionar branches aqui para novos personagens
+  la      a0, name_aleatorio
+  li      a7, 4
+  ecall
+
+  # imprime o sufixo (Jogador 1) ou (Jogador 2)
+  beq     s0, x0, draw_health_suffix_j1
+  la      a0, suffix_j2
+  j       draw_health_suffix_done
+draw_health_suffix_j1:
+  la      a0, suffix_j1
+draw_health_suffix_done:
+  li      a7, 4
+  ecall
+
   la      t0, players_health
   beq     s0, x0, draw_health_player_1
-  
-  la a0, player_two_title
-  li a7, 4 
-  ecall 
-
 
   lw      s1, 4(t0)
   j       draw_health_bar
 
 draw_health_player_1:
-  la a0, player_one_title
-  li a7, 4 
-  ecall 
-
   lw      s1, 0(t0)
 
 draw_health_bar:
