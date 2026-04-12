@@ -442,8 +442,8 @@ randomizer:
   xor     t0, t0, t1
   # t0 = xorshift bruto
 
-  remu    t1, t0, s0   # remu trata t0 como unsigned, evitando resultado negativo
-  addi    t1, t1, 1
+  remu    s1, t0, s0   # s1 preserva o resultado apos o ecall; remu unsigned evita valor negativo
+  addi    s1, s1, 1
 
   # atualiza current_time com o tempo real para aumentar entropia
   la      t4, current_time
@@ -457,7 +457,7 @@ randomizer:
   xor     t5, t5, t0
   sw      t5, 0(t3)
 
-  mv      a1, t1
+  mv      a1, s1
   
   endF
   ret
