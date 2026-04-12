@@ -281,7 +281,8 @@ pad_tab:        .string " "
 
 
 line_break: .string "\n"
-health_max: .string "  / 100 \n"
+health_max: .string "  / 100  | "
+mana_max:   .string "  / 100 \n"
 turn_message: .string ""
 
 clear_screen: .byte 27, 91, 50, 74, 27, 91, 72, 0
@@ -582,6 +583,53 @@ draw_health_end:
   li      a7, 4
   ecall
 
+  mv      a0, s0
+  call    draw_mana
+
+  endF
+  ret
+
+draw_mana:
+  # recebe o jogador em a0 (0 = jogador 1, 1 = jogador 2)
+  startF
+  mv      s0, a0
+
+  la      t0, players_mp
+  beq     s0, x0, draw_mana_player_1
+
+  lw      s1, 4(t0)
+  j       draw_mana_bar
+
+draw_mana_player_1:
+  lw      s1, 0(t0)
+
+draw_mana_bar:
+  li      t1, 50
+  blt     s1, t1, draw_mana_half
+  la      a0, bar_mp_full
+  j       draw_mana_end
+
+draw_mana_half:
+  li      t1, 10
+  blt     s1, t1, draw_mana_crit
+  la      a0, bar_mp_half
+  j       draw_mana_end
+
+draw_mana_crit:
+  la      a0, bar_mp_crit
+
+draw_mana_end:
+  li      a7, 4
+  ecall
+
+  mv      a0, s1
+  li      a7, 1
+  ecall
+
+  la      a0, mana_max
+  li      a7, 4
+  ecall
+
   endF
   ret
 
@@ -631,7 +679,7 @@ print_prefix_done:
   call print_newlines
   j state_done
 state_empty:
-  li a0, 1
+  li a0, 2
   call print_newlines
 state_done:
 
@@ -910,12 +958,12 @@ detect_end:
   ret 
   
 do_player_turn:
-  # recebe estrategia em a0 
-  startF 
+  # recebe estrategia em a0
+  startF
   li      t1, 1
-  
 
-  beq     a0, t1, do_player_1_turn 
+
+  beq     a0, t1, do_player_1_turn
   j       do_player_2_turn
 
 do_player_1_turn:
