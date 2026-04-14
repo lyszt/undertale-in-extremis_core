@@ -1,6 +1,6 @@
 # ORG 2026.1
 # Sistema de combate de RPG simulado em RISCV
-
+# Era pra parecer World of Warcraft mas na verdade parece pokemon
   .data
 
 # DIVISORES
@@ -257,8 +257,9 @@ msg_jogador_2: .string " O jogador 2 "
 attack: .string "tentou fazer um ataque básico!\n"
 attack_crit: .string "o ataque foi crítico!\n"
 attack_success: .string "acertou!\n"
-
 attack_fail: .string "errou!\n"
+
+skill_usage: .string "Usa a habilidade "
 
 defense: .string "tentou defender!\n"
 defense_crit: .string "defendeu e realizou um contra ataque!\n"
@@ -324,19 +325,21 @@ idle_defensivo_frames:
 # MACROS 
 
 .macro     startF
-    addi       sp, sp, -16
-    sw         ra, 12(sp)
-    sw         s0, 8(sp)
-    sw         s1, 4(sp)
-    sw         s2, 0(sp)
+    addi       sp, sp, -20
+    sw         ra, 16(sp)
+    sw         s0, 12(sp)
+    sw         s1, 8(sp)
+    sw         s2, 4(sp)
+    sw         s3, 0(sp)
     .end_macro
 
     .macro     endF
-    lw         ra, 12(sp)
-    lw         s0, 8(sp)
-    lw         s1, 4(sp)
-    lw         s2, 0(sp)
-    addi       sp, sp, 16
+    lw         ra, 16(sp)
+    lw         s0, 12(sp)
+    lw         s1, 8(sp)
+    lw         s2, 4(sp)
+    lw         s3, 0(sp)
+    addi       sp, sp, 20
     .end_macro
 
   .text
@@ -895,6 +898,42 @@ do_counter_attack:
 	sw t0, 0(t2)
 	endF
 	ret 
+
+
+do_skill:
+  startF 
+  # recebe em a0 o nome da habilidade 
+  # recebe em a1 o endereço de uma função
+  # recebe o alvo em a2
+  # recebe o custo em mp em a3 
+  mv s3, a3 
+  mv s2, a0
+  mv s1, a2 
+  mv s0, a1 
+  
+  la a0, skill_usage 
+  li a7, 4 
+  ecall 
+
+  mv a0, s2 
+  li a7, 4 
+  ecall 
+
+  jalr a1
+
+do_skill_end: 
+  la t0, player_turn
+  li t1, 4 
+  la t2, players_mp
+  lw t3, 0(t0)
+
+  mul t1, t3, t1 
+  add t2, t2, t1 
+  lw t3, 0(t2)
+  sub t3, t3, s3 
+  sw t3, 0(t2)
+  endF 
+  ret 
 
 
 do_defense:
