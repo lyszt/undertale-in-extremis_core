@@ -270,6 +270,10 @@ defense_success: .string "defendeu!\n"
 damage_log: .string  "       Dano causado (hp): "
 newline:    .string  "\n"
 
+died_text: .string "morreu! "
+died_p1: .string "O jogador 1 morreu!\n"
+died_p2: .string "O jogador 2 morreu!\n"
+
 # CAIXAS DE TEXTO E DIALOGO
 box_top:        .string " +---------------------------------------+ \n"
 box_mid:        .string "                                          \n"
@@ -754,12 +758,23 @@ game_loop_start:
   lw t1, 0(t0)
   lw t2, 4(t0)
   
-  ble t1, x0, game_loop_end
-  ble t2, x0, game_loop_end
+  ble t1, x0, game_loop_p1_died
+  ble t2, x0, game_loop_p2_died
   j game_loop_start
 
-game_loop_end: 
-  endF 
+game_loop_p1_died:
+  la a0, died_p1
+  li a7, 4
+  ecall
+  j game_loop_end
+
+game_loop_p2_died:
+  la a0, died_p2
+  li a7, 4
+  ecall
+
+game_loop_end:
+  endF
   ret
 
 do_attack:
