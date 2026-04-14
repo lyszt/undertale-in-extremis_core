@@ -1050,8 +1050,13 @@ do_turn_action:
   call decision 
   li t1, 1 
   beq t1, a0, do_turn_attack
+  li t1, 2
+  beq t1, a0, do_turn_skill
   j do_turn_defense
 
+do_turn_skill: 
+  # passar a classe pra uma função de decisão de habilidade
+  j do_turn_render_action
 do_turn_attack:
   call do_attack 
   j do_turn_render_action
