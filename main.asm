@@ -924,6 +924,17 @@ do_skill:
   mv s1, a2 
   mv s0, a1 
   
+  la t0, player_turn
+  lw t1, 0(t0)
+
+  # 2. Puxa o MP do jogador 
+  slli t2, t1, 2
+  la t0, players_mp
+  add t0, t0, t2
+  lw t3, 0(t0)
+  
+  # por enquanto vai pro do attack quando não tem mana 
+  blt t3, a3, do_attack
   la t3, current_state
   sw a0, 0(t3)
 
