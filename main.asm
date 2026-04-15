@@ -260,6 +260,8 @@ attack_success: .string "acertou!\n"
 attack_fail: .string "errou!\n"
 
 skill_usage: .string "Usa a habilidade "
+skill_absolute_grit: .string "Usou Força de Vontade Absoluta!"
+
 
 defense: .string "tentou defender!\n"
 defense_crit: .string "defendeu e realizou um contra ataque!\n"
@@ -276,7 +278,7 @@ died_p2: .string "O jogador 2 morreu!\n"
 
 # CAIXAS DE TEXTO E DIALOGO
 box_top:        .string " +---------------------------------------+ \n"
-box_mid:        .string "                                          \n"
+box_mid:        .string "                                           \n"
 box_bot:        .string " +---------------------------------------+ \n"
 
 # PONTEIROS E ESPACAMENTO
@@ -295,7 +297,7 @@ turn_message: .string ""
 clear_screen: .byte 27, 91, 50, 74, 27, 91, 72, 0
 
 player_turn:    .word   0
-estrategias:    .word   0, 0
+player_strategy:    .word   0, 0
 players_health: .word   100, 100
 players_mp:     .word   100, 100
 seed:           .word   5
@@ -303,7 +305,8 @@ current_time:   .word   0
 current_frame:  .word   0
 last_damage:    .word   0
 defense_fail_bonus: .word 0 
-is_defending: .word 0, 0 
+is_defending: .word 0, 0
+flowey_skills: .word do_absolute_grit
 
 idle_aleatorio_frames:
   .word ascii_aleatorio_idle_1
@@ -378,7 +381,7 @@ _start:
   li a0, 1 
   call    randomizer
 
-  la      t0, estrategias
+  la      t0, player_strategy
   sw      a1, 0(t0)
 
   # Salva o valor em s1 antes de imprimir o texto e o numero
@@ -405,7 +408,7 @@ _start:
   li a0, 1
   call    randomizer
 
-  la      t0, estrategias 
+  la      t0, player_strategy 
   sw      a1, 4(t0)
 
   # Imprime: " O jogador 2 escolheu: "
@@ -548,7 +551,7 @@ draw_health:
   mv      s0, a0
 
   # imprime o nome do personagem baseado na estrategia do jogador
-  la      t0, estrategias
+  la      t0, player_strategy
   beq     s0, x0, draw_health_load_j1_strat
   lw      s2, 4(t0)           # estrategia do jogador 2
   j       draw_health_print_name
@@ -753,7 +756,7 @@ game_loop_start:
   # exclusive OR immediate 
   xori    a0, a0, 1
   sw      a0, 0(t0)
-
+  
   la t0, players_health
   lw t1, 0(t0)
   lw t2, 4(t0)
@@ -778,55 +781,31 @@ game_loop_end:
   ret
 
 do_attack:
-	startF
+    startF
 
   # current state mostra mensagem do jogador atacar
   la t1, current_state
   la t2, attack 
   sw t2, 0(t1)
 
-	la t0, player_turn
-	lw s1, 0(t0)
 
-	# s2 = offset do atacante na memoria (indice do jogador atual * 4 bytes)
-	# jogador 0 fica no offset 0, jogador 1 fica no offset 4
-	li t2, 4
-	mul s2, s1, t2
+    call calculate_success
+    # caso d20 > 10, acertamos. se nao, erramos. se 20, critico
+  call calculate_damage
 
-	# s3 = offset do inimigo (o oposto do atacante)
-	# xori inverte o bit menos significativo: 0 vira 1, 1 vira 0
-	# assim achamos o indice do jogador que vai RECEBER o dano
-	xori t4, s1, 1
-	# multiplicamos por 4 para obter o offset de memoria do inimigo
-	mul s3, t4, t2
-
-	# 1d5 de dano
-	li a0, 5
-	call randomizer
-	mv s0, a1
-	# adicionamos 1 pro ataque nao dar 0 de dano (erro)
-	addi s0, s0, 1
-	call calculate_success
-	# caso d20 > 10, acertamos. se nao, erramos. se 20, critico
-
-	# lemos a vida do INIMIGO usando o offset do inimigo (s3)
-	la t3, players_health
-	add t3, t3, s3
-	lw t0, 0(t3)
-
-	li t1, 20 
-	beq a1, t1, do_attack_crit
-	li t1, 10 
-	bge a1, t1, do_attack_normal
-	j do_attack_fail
+    li t1, 20 
+    beq a1, t1, do_attack_crit
+    li t1, 10 
+    bge a1, t1, do_attack_normal
+    j do_attack_fail
 
 do_attack_fail: 
   la t5, current_state
   la t4, attack_fail 
   sw t4, 0(t5)
 
-	endF
-	ret
+    endF
+    ret
 
 
 do_attack_defended: 
@@ -834,8 +813,8 @@ do_attack_defended:
   la t4, defense_success 
   sw t4, 0(t5)
 
-	endF
-	ret
+    endF
+    ret
 
 do_attack_crit:
 
@@ -843,19 +822,38 @@ do_attack_crit:
   la t4, attack_crit 
   sw t4, 0(t5)
 
-	# dobra o ataque
-	li t3, 2
-	mul s0, s0, t3
-	sub t0, t0, s0
+    # dobra o ataque
+    li t3, 2
+    mul s0, s0, t3
+    sub t0, t0, s0
 
-	la t1, last_damage
-	sw s0, 0(t1)
+    la t1, last_damage
+    sw s0, 0(t1)
 
-	la t1, players_health
-	add t2, t1, s3
-	sw t0, 0(t2)
-	endF
-	ret
+    la t1, players_health
+    add t2, t1, s3
+    sw t0, 0(t2)
+    endF
+    ret
+
+do_attack_crit_no_message:
+
+    # dobra o ataque
+    li t3, 2
+    mul s0, s0, t3
+    sub t0, t0, s0
+
+    la t1, last_damage
+    sw s0, 0(t1)
+
+    la t1, players_health
+    add t2, t1, s3
+    sw t0, 0(t2)
+    endF
+    ret
+
+
+
 
 do_attack_normal:
   la t5, is_defending 
@@ -864,25 +862,25 @@ do_attack_normal:
   lw a5, 0(t5)
   beq a5, t6, do_attack_check_is_defending
 
-	la t5, current_state
-	la t4, attack_success
-	sw t4, 0(t5)
+    la t5, current_state
+    la t4, attack_success
+    sw t4, 0(t5)
   
   # O randomizer destruiu o t0 antigo, então pegamos da memoria de novo.
   la t1, players_health
   add t2, t1, s3
   lw t0, 0(t2)
 
-	sub t0, t0, s0
+    sub t0, t0, s0
 
-	la t1, last_damage
-	sw s0, 0(t1)
+    la t1, last_damage
+    sw s0, 0(t1)
 
-	la t1, players_health
-	add t2, t1, s3
-	sw t0, 0(t2)
-	endF
-	ret 
+    la t1, players_health
+    add t2, t1, s3
+    sw t0, 0(t2)
+    endF
+    ret 
 
 do_attack_check_is_defending:
   li a5, 0
@@ -898,21 +896,21 @@ do_attack_check_is_defending:
   j do_attack_normal
   
 do_counter_attack:
-	la t5, current_state
-	la t4, defense_crit
-	sw t4, 0(t5)
+    la t5, current_state
+    la t4, defense_crit
+    sw t4, 0(t5)
   
   # dano ao jogador contrário (Riposte!)
-	la t1, players_health
+    la t1, players_health
   add t2, t1, s2        # aponta para a vida do atacante
   lw t0, 0(t2)
 
   sub t0, t0, s0
-	la t1, last_damage
-	sw s0, 0(t1)
-	sw t0, 0(t2)
-	endF
-	ret 
+    la t1, last_damage
+    sw s0, 0(t1)
+    sw t0, 0(t2)
+    endF
+    ret 
 
 
 do_skill:
@@ -926,23 +924,17 @@ do_skill:
   mv s1, a2 
   mv s0, a1 
   
-  la a0, skill_usage 
-  li a7, 4 
-  ecall 
-
-  mv a0, s2 
-  li a7, 4 
-  ecall 
+  la t3, current_state
+  sw a0, 0(t3)
 
   jalr a1
 
 do_skill_end: 
   la t0, player_turn
-  li t1, 4 
   la t2, players_mp
   lw t3, 0(t0)
 
-  mul t1, t3, t1 
+  slli t1, t3, 2
   add t2, t2, t1 
   lw t3, 0(t2)
   sub t3, t3, s3 
@@ -952,25 +944,25 @@ do_skill_end:
 
 
 do_defense:
-	startF
+    startF
 
   # current state mostra mensagem do jogador ao defender 
   la t1, current_state
   la t2, defense 
   sw t2, 0(t1)
   
-	la t0, player_turn
-	lw s1, 0(t0)
-  li t1, 4 
-  mul s1, s1, t1 
+    la t0, player_turn
+    lw s1, 0(t0)
+  slli s1, s1, 2
 
   la t1, is_defending
   add t1, t1, s1 
 
-  li t2, 1 
+  li t2, 1
   sw t2, 0(t1)
-  
 
+  endF
+  ret
 
 
 print_player_ascii:
@@ -978,12 +970,12 @@ print_player_ascii:
   li      t1, 1
   beq     a0, t1, print_p1_strat
 
-  la      t0, estrategias
+  la      t0, player_strategy
   lw      a1, 4(t0)
   j       p_ascii_branch
 
 print_p1_strat:
-  la      t0, estrategias
+  la      t0, player_strategy
   lw      a1, 0(t0)
 
 p_ascii_branch:
@@ -1005,28 +997,18 @@ p_ascii_loop:
   endF
   ret
 
+ 
 detect_strategy: 
   startF
-  # detects player strategy and returns on a0 
-  # receives player on a0 
-  li      t1, 1 
-  
-  beq     a0, t1, detect_player_one_st
-  j       detect_player_two_st
-
-detect_player_one_st:
-  la      t0, estrategias
-  lw      a0, 0(t0)
-  j       detect_end
-  
-detect_player_two_st:
-  la      t0, estrategias
-  lw      a0, 4(t0)
-  
-detect_end: 
+  la t0, player_turn
+  lw t1, 0(t0)       # pega de quem é o turno (0 ou 1)
+  slli t1, t1, 2     # multiplica por 4
+  la t0, player_strategy
+  add t0, t0, t1
+  lw a0, 0(t0)       # retorna a estratégia em a0
   endF 
-  ret 
-  
+  ret
+
 do_player_turn:
   # recebe estrategia em a0
   startF
@@ -1047,15 +1029,22 @@ do_player_2_turn:
   j do_turn_action
 
 do_turn_action:
-  call decision 
-  li t1, 1 
+  call decision
+  li t1, 1
   beq t1, a0, do_turn_attack
   li t1, 2
-  beq t1, a0, do_turn_skill
-  j do_turn_defense
+  beq t1, a0, do_turn_defense
+  li t1, 3
+  beq t1, a0, do_turn_skill_absolute_grit
+  j do_turn_render_action
 
-do_turn_skill: 
-  # passar a classe pra uma função de decisão de habilidade
+do_turn_skill_absolute_grit:
+  la a0, skill_absolute_grit
+  la a1, do_absolute_grit
+  li a2, 0
+  li a3, 20
+  call do_skill
+
   j do_turn_render_action
 do_turn_attack:
   call do_attack 
@@ -1065,20 +1054,20 @@ do_turn_defense:
   call do_defense
 
 do_turn_render_action:
-	# renderiza um frame completo com sprite + vida + resultado do ataque
-	la t0, player_turn
-	lw s4, 0(t0)       # salva o indice do jogador (0=j1, 1=j2)
-	xori a0, s4, 1     # converte para detect_strategy (j1=1, j2=0)
-	call detect_strategy
-	mv a1, a0          # estrategia em a1
-	mv a0, s4          # indice do jogador em a0
-	call print_ascii
-	li a0, 500
-	li a7, 32
-	ecall
+    # renderiza um frame completo com sprite + vida + resultado do ataque
+    la t0, player_turn
+    lw s4, 0(t0)       # salva o indice do jogador (0=j1, 1=j2)
+    call detect_strategy
+    mv a1, a0          # estrategia em a1
+    mv a0, s4          # indice do jogador em a0
+    call print_ascii
+    li a0, 500
+    li a7, 32
+    ecall
   j do_end_turn
 
 do_end_turn:
+  call do_mana_regen
   endF 
   ret
 
@@ -1095,15 +1084,79 @@ calculate_success:
 decision:
   startF 
   call detect_strategy
-
   li t1, 1 
   beq a0, t1, decision_random
 decision_random:
-  # there's only two possible decisions now so I'll leave it at that 
-  li a0, 2
+  li a0, 3
   call randomizer
 decision_end:
   # returns decision in a0 (and accidentally in a1 as well)
   mv a0, a1
   endF 
+  ret
+
+
+# HABILIDADES
+
+# Habilidades básicas 
+
+
+# A habilidade mais facil de fazer 
+do_absolute_grit:
+  startF
+  # Habilidade que te força a executar um ataque crítico
+  call calculate_damage
+  j do_attack_crit_no_message
+
+
+# Funções uteis 
+calculate_damage:
+  addi sp, sp, -4
+  sw ra, 0(sp)
+
+  # 1. Rola o dado PRIMEIRO (porque o randomizer destroi o t0)
+  mv s4, a1
+  li a0, 6
+  call randomizer
+  mv s0, a1
+  addi s0, s0, 1
+  mv a1, s4
+
+  # 2. SÓ DEPOIS pega os ponteiros e a vida do inimigo
+  la t0, player_turn
+  lw s1, 0(t0)
+
+  slli s2, s1, 2
+
+  xori t4, s1, 1
+  slli s3, t4, 2
+
+  la t3, players_health
+  add t3, t3, s3
+  lw t0, 0(t3) # Agora t0 esta seguro e contem a vida real
+
+  # Restaura o endereço de retorno e limpa a stack ANTES do ret
+  lw ra, 0(sp)
+  addi sp, sp, 4
+  ret
+
+
+do_mana_regen:
+  startF
+  la t0, players_mp
+  lw t1, 0(t0)
+  li t2, 100
+  bge t1, t2, player_2_check
+player_1_regen: 
+  addi t1, t1, 2
+  sw t1, 0(t0)
+player_2_check:
+  addi t0, t0, 4
+  lw t1, 0(t0)
+  bge t1, t2, do_mana_regen_end
+player_2_regen:
+  addi t1, t1, 2
+  sw t1, 0(t0)
+do_mana_regen_end:
+  endF
   ret
