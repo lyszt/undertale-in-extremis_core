@@ -1132,6 +1132,7 @@ do_absolute_grit:
 
 # SOUL SUCK 
 # Rouba MP do jogador inimigo 
+# Única habilidade que te permite ter mais que 100 MP! Serve como um overcharge
 do_soul_suck:
   startF
   # sofre quantidade aleatoria de dano, mas rouba 4x o MP  
