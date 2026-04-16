@@ -1054,7 +1054,7 @@ do_turn_skill_absolute_grit:
   la a0, skill_absolute_grit
   la a1, do_absolute_grit
   li a2, 0
-  li a3, 20
+  li a3, 50
   call do_skill
 
   j do_turn_render_action
