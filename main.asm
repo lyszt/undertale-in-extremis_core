@@ -260,8 +260,8 @@ attack_success: .string "acertou!\n"
 attack_fail: .string "errou!\n"
 
 skill_usage: .string "Usa a habilidade "
-skill_absolute_grit: .string "Usou Força de Vontade Absoluta!"
-
+skill_absolute_grit: .string "usou Força de Vontade Absoluta!"
+skill_soul_suck: .string "sugou a alma do outro jogador!"
 
 defense: .string "tentou defender!\n"
 defense_crit: .string "defendeu e realizou um contra ataque!\n"
@@ -306,7 +306,6 @@ current_frame:  .word   0
 last_damage:    .word   0
 defense_fail_bonus: .word 0 
 is_defending: .word 0, 0
-flowey_skills: .word do_absolute_grit
 
 idle_aleatorio_frames:
   .word ascii_aleatorio_idle_1
@@ -1047,6 +1046,8 @@ do_turn_action:
   beq t1, a0, do_turn_defense
   li t1, 3
   beq t1, a0, do_turn_skill_absolute_grit
+  li t1, 4 
+  beq t1, a0, do_turn_skill_soul_suck
   j do_turn_render_action
 
 do_turn_skill_absolute_grit:
@@ -1054,6 +1055,16 @@ do_turn_skill_absolute_grit:
   la a1, do_absolute_grit
   li a2, 0
   li a3, 20
+  call do_skill
+
+  j do_turn_render_action
+
+
+do_turn_skill_soul_suck:
+  la a0, skill_soul_suck
+  la a1, do_soul_suck
+  li a2, 0
+  li a3, 0
   call do_skill
 
   j do_turn_render_action
@@ -1098,7 +1109,7 @@ decision:
   li t1, 1 
   beq a0, t1, decision_random
 decision_random:
-  li a0, 3
+  li a0, 4
   call randomizer
 decision_end:
   # returns decision in a0 (and accidentally in a1 as well)
@@ -1118,6 +1129,35 @@ do_absolute_grit:
   # Habilidade que te força a executar um ataque crítico
   call calculate_damage
   j do_attack_crit_no_message
+
+# SOUL SUCK 
+# Rouba MP do jogador inimigo 
+do_soul_suck:
+  startF
+  # sofre quantidade aleatoria de dano, mas rouba 4x o MP  
+  li a0, 12
+  call randomizer
+  la t1, player_turn 
+  lw t3, 0(t1)
+  slli t3, t3, 2
+
+  la t0, players_health
+  add t0, t0, t3
+  lw t2, 0(t0)
+  sub t2, t2, a1
+  sw t2, 0(t0)
+  
+  la t0, players_mp
+  add t0, t0, t3
+  lw t2, 0(t0)
+  slli a1, a1, 2
+  add t2, t2, a1 
+  sw t2, 0(t0)
+  endF 
+  ret
+  
+
+
 
 
 # Funções uteis 
