@@ -1138,17 +1138,28 @@ do_soul_suck:
   # sofre quantidade aleatoria de dano, mas rouba 4x o MP  
   li a0, 12
   call randomizer
-  la t1, player_turn 
+  la t1, player_turn
   lw t3, 0(t1)
+  mv t4, t3 
+  xori t4, t4, 1 
   slli t3, t3, 2
+  slli t4, t4, 2 
 
   la t0, players_health
   add t0, t0, t3
   lw t2, 0(t0)
+  # a1 é o dano da habilidade 
   sub t2, t2, a1
   sw t2, 0(t0)
   
+  # subtrai mp do inimigo 
   la t0, players_mp
+  mv t5, t0 
+  add t5, t5, t4 
+  lw t6, 0(t5)
+  sub t6, t6, a1 
+  sw t6, 0(t5)
+
   add t0, t0, t3
   lw t2, 0(t0)
   slli a1, a1, 2
