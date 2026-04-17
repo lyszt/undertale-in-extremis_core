@@ -262,6 +262,8 @@ attack_fail: .string "errou!\n"
 skill_usage: .string "Usa a habilidade "
 skill_absolute_grit: .string "usou Força de Vontade Absoluta!"
 skill_soul_suck: .string "sugou a alma do outro jogador!"
+skill_final_execution: .string "realizou a execução final!"
+
 
 defense: .string "tentou defender!\n"
 defense_crit: .string "defendeu e realizou um contra ataque!\n"
@@ -1168,6 +1170,15 @@ do_soul_suck:
   endF 
   ret
   
+# Execução final 
+# Se o inimigo possuir menos de 50% de vida, causa 400% de dano a mais 
+# Só pode ser executada com 150 de MP (ou seja, precisa usar o soul suck)
+do_final_execution: 
+  startF 
+
+
+  endF 
+  ret 
 
 
 
