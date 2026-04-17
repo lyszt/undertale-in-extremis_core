@@ -1188,7 +1188,6 @@ calculate_damage:
   addi sp, sp, -4
   sw ra, 0(sp)
 
-  # 1. Rola o dado PRIMEIRO (porque o randomizer destroi o t0)
   mv s4, a1
   li a0, 6
   call randomizer
@@ -1196,7 +1195,6 @@ calculate_damage:
   addi s0, s0, 1
   mv a1, s4
 
-  # 2. SÓ DEPOIS pega os ponteiros e a vida do inimigo
   la t0, player_turn
   lw s1, 0(t0)
 
@@ -1207,9 +1205,7 @@ calculate_damage:
 
   la t3, players_health
   add t3, t3, s3
-  lw t0, 0(t3) # Agora t0 esta seguro e contem a vida real
-
-  # Restaura o endereço de retorno e limpa a stack ANTES do ret
+  lw t0, 0(t3)
   lw ra, 0(sp)
   addi sp, sp, 4
   ret
