@@ -1045,9 +1045,9 @@ do_turn_action:
   li t1, 1
   beq t1, a0, do_turn_attack
   li t1, 2
-  beq t1, a0, do_turn_defense
-  li t1, 3
   beq t1, a0, do_turn_skill_absolute_grit
+  li t1, 3
+  beq t1, a0, do_turn_defense
   li t1, 4 
   beq t1, a0, do_turn_skill_soul_suck
   li t1, 5 
@@ -1124,6 +1124,44 @@ decision:
 decision_random:
   li a0, 5
   call randomizer
+decision_smart: 
+  # eu escrevi essa estrategia 
+  # ela se consiste em usar roubo de alma até poder usar execute 
+  # só que pra isso também precisamos sobreviver e diminuir a vida do inimigo pra 50%
+  # sem morrer 
+  la t0, players_health
+  la t1, players_mp
+  la t2, player_turn
+
+  lw t3, 0(t2) # turno
+  mv a0, t3
+  xori a0, a0, 1 
+  slli a0, a0, 2 
+  mv a1, t0
+  add a1, a1, a0 
+  lw a2, 0(a1)
+
+  slli t3, t3, 2 
+  add t1, t1, t3 
+  add t2, t2, t3
+
+  lw t4, 0(t1) # mp 
+  lw t5, 0(t0) # vida 
+
+  li t6, 150 # preço do execute
+  blt t4, t6, decision_smart_my_mana_is_low
+  li t6, 50 
+  bge a2, t6, decision_smart_enemy_hp_high
+  j decision_smart_i_can_kill
+
+decision_smart_my_mana_is_low:
+  # vamos rodar soul suck 
+  li a0, 4 
+decision_smart_enemy_hp_high:
+  li a0, 2 
+  mv a0, a1 
+decision_smart_i_can_kill:
+  li a0, 5
 decision_end:
   # returns decision in a0 (and accidentally in a1 as well)
   mv a0, a1
