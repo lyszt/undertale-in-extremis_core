@@ -263,7 +263,7 @@ skill_usage: .string "Usa a habilidade "
 skill_absolute_grit: .string "usou Força de Vontade Absoluta!"
 skill_soul_suck: .string "sugou a alma do outro jogador!"
 skill_final_execution: .string "realizou a execução final!"
-
+skill_final_execution_fail: .string "tentou realizar a execução final, mas falhou!"
 
 defense: .string "tentou defender!\n"
 defense_crit: .string "defendeu e realizou um contra ataque!\n"
@@ -1050,6 +1050,8 @@ do_turn_action:
   beq t1, a0, do_turn_skill_absolute_grit
   li t1, 4 
   beq t1, a0, do_turn_skill_soul_suck
+  li t1, 5 
+  beq t1, a0, do_turn_skill_final_execution
   j do_turn_render_action
 
 do_turn_skill_absolute_grit:
@@ -1057,6 +1059,15 @@ do_turn_skill_absolute_grit:
   la a1, do_absolute_grit
   li a2, 0
   li a3, 20
+  call do_skill
+
+  j do_turn_render_action
+
+do_turn_skill_final_execution:
+  la a0, skill_final_execution
+  la a1, do_final_execution
+  li a2, 0
+  li a3, 150
   call do_skill
 
   j do_turn_render_action
@@ -1111,7 +1122,7 @@ decision:
   li t1, 1 
   beq a0, t1, decision_random
 decision_random:
-  li a0, 4
+  li a0, 5
   call randomizer
 decision_end:
   # returns decision in a0 (and accidentally in a1 as well)
@@ -1175,8 +1186,31 @@ do_soul_suck:
 # Só pode ser executada com 150 de MP (ou seja, precisa usar o soul suck)
 do_final_execution: 
   startF 
+  
+  la t0, player_turn
+  lw t1, 0(t0)
+  xori t2, t1, 1 
+  slli t2, t2, 2 
+  
+  la t4, players_health
+  add t4, t4, t2
+  lw t5, 0(t4)
+
+  li t3, 50
+  ble t3, t5, do_final_execution_fail
+  call calculate_damage
+  slli s0, s0, 2 
+  j do_attack_crit_no_message
+
+do_final_execution_fail: 
+  la a0, current_state
+  la a1, skill_final_execution_fail
+  sw a1, 0(a0)
+  endF 
+  ret
 
 
+do_final_execution_end:
   endF 
   ret 
 
