@@ -246,6 +246,8 @@ suffix_j1: .string " (Jogador 1) "
 suffix_j2: .string " (Jogador 2) "
 
 name_aleatorio: .string " Flowey"
+name_smart: .string "Chara"
+
 
 # TEXTOS PARA ESTADOS DE BATALHA 
 
@@ -299,7 +301,7 @@ turn_message: .string ""
 clear_screen: .byte 27, 91, 50, 74, 27, 91, 72, 0
 
 player_turn:    .word   0
-player_strategy:    .word   0, 0
+player_strategy:    .word   1, 2
 players_health: .word   100, 100
 players_mp:     .word   100, 100
 seed:           .word   5
@@ -377,9 +379,7 @@ _start:
   ecall
 
 
-  # 1 por enquanto, porque a estratégia agressiva e defensiva foi removida 
-  # será substituida por classes depois que eu implementar habilidades de classe 
-  li a0, 1 
+  li a0, 2
   call    randomizer
 
   la      t0, player_strategy
@@ -406,7 +406,7 @@ _start:
   li      a7, 4
   ecall
 
-  li a0, 1
+  li a0, 2
   call    randomizer
 
   la      t0, player_strategy 
@@ -555,15 +555,23 @@ draw_health:
   la      t0, player_strategy
   beq     s0, x0, draw_health_load_j1_strat
   lw      s2, 4(t0)           # estrategia do jogador 2
-  j       draw_health_print_name
+  j       draw_health_check_name
 draw_health_load_j1_strat:
   lw      s2, 0(t0)           # estrategia do jogador 1
-draw_health_print_name:
-  # por ora so existe aleatorio; adicionar branches aqui para novos personagens
+draw_health_check_name:
+  li      t1, 2
+  beq     s2, t1, draw_health_print_name_smart
+draw_health_print_name_random:
   la      a0, name_aleatorio
   li      a7, 4
   ecall
-
+  j draw_health_print_name
+draw_health_print_name_smart:
+  la      a0, name_smart
+  li      a7, 4
+  ecall
+  j draw_health_print_name
+draw_health_print_name:
   # imprime o sufixo (Jogador 1) ou (Jogador 2)
   beq     s0, x0, draw_health_suffix_j1
   la      a0, suffix_j2
@@ -1121,9 +1129,11 @@ decision:
   call detect_strategy
   li t1, 1 
   beq a0, t1, decision_random
+  j decision_smart
 decision_random:
   li a0, 5
   call randomizer
+  j decision_end
 decision_smart: 
   # eu escrevi essa estrategia 
   # ela se consiste em usar roubo de alma até poder usar execute 
@@ -1157,11 +1167,16 @@ decision_smart:
 decision_smart_my_mana_is_low:
   # vamos rodar soul suck 
   li a0, 4 
+  j decision_smart_end
 decision_smart_enemy_hp_high:
-  li a0, 2 
-  mv a0, a1 
+  li a0, 2
+  j decision_smart_end
 decision_smart_i_can_kill:
   li a0, 5
+  j decision_smart_end
+decision_smart_end: 
+  endF 
+  ret 
 decision_end:
   # returns decision in a0 (and accidentally in a1 as well)
   mv a0, a1
