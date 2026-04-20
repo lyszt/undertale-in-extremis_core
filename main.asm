@@ -1236,6 +1236,7 @@ do_soul_suck:
   
 # Execução final 
 # Se o inimigo possuir menos de 50% de vida, causa 800% de dano a mais 
+# Dano + 800% + 10 (meio op talvez)
 # Só pode ser executada com 150 de MP (ou seja, precisa usar o soul suck)
 do_final_execution: 
   startF 
@@ -1253,6 +1254,7 @@ do_final_execution:
   ble t3, t5, do_final_execution_fail
   call calculate_damage
   slli s0, s0, 2 
+  addi s0, s0, 10
   j do_attack_crit_no_message
 
 do_final_execution_fail: 
