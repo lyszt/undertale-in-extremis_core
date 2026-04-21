@@ -1146,6 +1146,11 @@ do_end_turn_reflect:
   lw t3, 0(t2)
   beqz t3, do_end_turn_end
 
+  # exibe mensagem de reflexo no estado atual
+  la t4, current_state
+  la t5, skill_mirror_shield
+  sw t5, 0(t4)
+
   # devolve o dano ao defensor (jogador oposto ao atacante)
   # assim o escudo espelho realmente bloqueia o dano recebido
   la t4, player_turn
