@@ -1330,10 +1330,10 @@ do_final_execution_end:
 do_mirror_shield:
   la t0, player_turn
   lw t2, 0(t0)
-  slli t2, t2, 4
+  slli t2, t2, 2
   la t0, mirror_shield_status
   add t0, t0, t2 
-  lw t1, 1 
+  li t1, 1 
   sw t1, 0(t0)
 
   startF
@@ -1344,10 +1344,10 @@ do_deactivate_mirror_shield:
   startF
   la t0, player_turn
   lw t2, 0(t0)
-  slli t2, t2, 4
+  slli t2, t2, 2
   la t0, mirror_shield_status
   add t0, t0, t2 
-  lw t1, 0
+  li t1, 0
   sw t1, 0(t0)
 
   endF
