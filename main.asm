@@ -266,6 +266,9 @@ skill_absolute_grit: .string "usou Força de Vontade Absoluta!"
 skill_soul_suck: .string "sugou a alma do outro jogador!"
 skill_final_execution: .string "realizou a execução final!"
 skill_final_execution_fail: .string "tentou realizar a execução final, mas falhou!"
+skill_mirror_shield_ready:  .string "ergue o Escudo Espelho e aguarda o impacto!"
+skill_mirror_shield:        .string "reflete o dano recebido!"
+skill_mirror_shield_fail:   .string "tentou erguer o Escudo Espelho, mas não estava preparado!"
 
 defense: .string "tentou defender!\n"
 defense_crit: .string "defendeu e realizou um contra ataque!\n"
@@ -310,6 +313,8 @@ current_frame:  .word   0
 last_damage:    .word   0
 defense_fail_bonus: .word 0 
 is_defending: .word 0, 0
+mirror_shield_status: .word 0,0
+
 
 idle_aleatorio_frames:
   .word ascii_aleatorio_idle_1
@@ -923,7 +928,9 @@ do_counter_attack:
 
 
 do_skill:
-  startF 
+  startF
+  la t0, last_damage
+  sw x0, 0(t0)
   # recebe em a0 o nome da habilidade 
   # recebe em a1 o endereço de uma função
   # recebe o alvo em a2
@@ -965,6 +972,8 @@ do_skill_end:
 
 do_defense:
     startF
+  la t0, last_damage
+  sw x0, 0(t0)
 
   # current state mostra mensagem do jogador ao defender 
   la t1, current_state
@@ -1058,8 +1067,10 @@ do_turn_action:
   beq t1, a0, do_turn_defense
   li t1, 4 
   beq t1, a0, do_turn_skill_soul_suck
-  li t1, 5 
+  li t1, 5
   beq t1, a0, do_turn_skill_final_execution
+  li t1, 6
+  beq t1, a0, do_turn_skill_mirror_shield
   j do_turn_render_action
 
 do_turn_skill_absolute_grit:
@@ -1076,6 +1087,15 @@ do_turn_skill_final_execution:
   la a1, do_final_execution
   li a2, 0
   li a3, 150
+  call do_skill
+
+  j do_turn_render_action
+
+do_turn_skill_mirror_shield:
+  la a0, skill_mirror_shield_ready
+  la a1, do_mirror_shield
+  li a2, 0
+  li a3, 30
   call do_skill
 
   j do_turn_render_action
@@ -1110,6 +1130,41 @@ do_turn_render_action:
   j do_end_turn
 
 do_end_turn:
+  call do_check_mirror_shield
+  bnez a0, do_end_turn_reflect
+  j do_end_turn_end
+do_end_turn_reflect:
+  la t1, player_turn
+  lw t1, 0(t1)
+  slli t1, t1, 2 
+
+  la t0, players_health
+  add t0, t0, t1 
+  lw t1, 0(t0)
+
+  la t2, last_damage
+  lw t3, 0(t2)
+  beqz t3, do_end_turn_end
+
+  # devolve o dano ao defensor (jogador oposto ao atacante)
+  # assim o escudo espelho realmente bloqueia o dano recebido
+  la t4, player_turn
+  lw t4, 0(t4)
+  xori t4, t4, 1
+  slli t4, t4, 2
+  la t5, players_health
+  add t5, t5, t4
+  lw t4, 0(t5)
+  add t4, t4, t3
+  sw t4, 0(t5)
+
+  # reflete o dano no atacante
+  sub t1, t1, t3
+  sw t1, 0(t0)
+  call do_deactivate_mirror_shield
+
+
+do_end_turn_end:
   call do_mana_regen
   endF 
   ret
@@ -1131,7 +1186,7 @@ decision:
   beq a0, t1, decision_random
   j decision_smart
 decision_random:
-  li a0, 5
+  li a0, 6
   call randomizer
   j decision_end
 decision_smart: 
@@ -1266,13 +1321,63 @@ do_final_execution_fail:
 
 
 do_final_execution_end:
+  endF
+  ret
+
+
+# ESCUDO ESPELHO
+# Prepara o jogador para refletir o próximo dano recebido de volta ao atacante
+do_mirror_shield:
+  la t0, player_turn
+  lw t2, 0(t0)
+  slli t2, t2, 4
+  la t0, mirror_shield_status
+  add t0, t0, t2 
+  lw t1, 1 
+  sw t1, 0(t0)
+
+  startF
+  endF
+  ret
+
+do_deactivate_mirror_shield:
+  startF
+  la t0, player_turn
+  lw t2, 0(t0)
+  slli t2, t2, 4
+  la t0, mirror_shield_status
+  add t0, t0, t2 
+  lw t1, 0
+  sw t1, 0(t0)
+
+  endF
+  ret
+
+
+do_check_mirror_shield:
+  startF
+
+  la t0, player_turn
+  lw t2, 0(t0)
+  xori t2, t2, 1 
+
+  slli t2, t2, 4
+  la t0, mirror_shield_status
+  add t0, t0, t2 
+  lw t1, 0(t0)
+  
+  bnez t1, do_check_mirror_shield_true 
+  li a0, 0
+  endF
+  ret
+
+do_check_mirror_shield_true:
+  li a0, 1 
   endF 
   ret 
 
 
-
-
-# Funções uteis 
+# Funções uteis
 calculate_damage:
   addi sp, sp, -4
   sw ra, 0(sp)
