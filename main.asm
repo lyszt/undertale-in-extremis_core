@@ -1265,14 +1265,14 @@ decision_troll_not_execute:
   li a0, 6
   call randomizer
   li t6, 3
-  bge a1, t6, decision_troll_soul_suck
-  j decision_troll_attack
-decision_troll_soul_suck:
-  li a0, 4
-  endF
-  ret
+  bge a1, t6, decision_troll_attack
+  j decision_troll_defend 
 decision_troll_attack:
   li a0, 1
+  endF
+  ret
+decision_troll_defend:
+  li a0, 3
   endF
   ret
 
