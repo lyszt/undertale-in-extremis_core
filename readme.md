@@ -116,6 +116,20 @@ Before drawing conclusions from the benchmark, there are a few structural biases
 
 The results are directionally interesting but should be read as a snapshot of this specific configuration, not a general statement about strategy vs randomness.
 
+## Future Research
+
+The obvious next step is getting off RARS entirely. This version runs on a Java-based RISC-V emulator, which puts a hard ceiling on simulation speed. A second version targeting real compiled RISC-V with Linux syscalls instead of RARS ecalls should be dramatically faster, which matters a lot once the match count starts climbing into the millions.
+
+Beyond performance, the more interesting directions are on the design side:
+
+**More players per match.** Right now it is always 1v1. Adding a third or fourth participant changes the strategic landscape completely — suddenly a counter-strategy has to account for being attacked from two directions at once, and pure randomness becomes harder to sustain.
+
+**Machine learning inside the assembly.** The idea is to implement a minimal ML algorithm directly in RISC-V, using matrix operations to let a bot update its own weights based on match outcomes. No external libraries, no high-level runtime, just integer matrix math in registers. Whether this is practical or just an interesting pain to implement is part of the appeal.
+
+**More strategies and a deeper engine.** The current action space is too small for any strategy to meaningfully pull ahead of random. Taking more direct inspiration from World of Warcraft — cooldowns, resource trade-offs, positioning effects, more varied skill interactions — would give well-designed strategies actual room to prove themselves over chaos.
+
+The benchmark infrastructure is already there. The bottleneck is the game being deep enough to make the results mean something.
+
 ## Running It
 
 To compile the assembly and run the engine locally:
