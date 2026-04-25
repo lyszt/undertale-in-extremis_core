@@ -247,6 +247,7 @@ suffix_j2: .string " (Jogador 2) "
 
 name_aleatorio: .string " Flowey"
 name_smart: .string "Chara"
+name_troll: .string "Toby"
 
 
 # TEXTOS PARA ESTADOS DE BATALHA 
@@ -384,7 +385,7 @@ _start:
   ecall
 
 
-  li a0, 2
+  li a0, 3
   call    randomizer
 
   la      t0, player_strategy
@@ -411,10 +412,10 @@ _start:
   li      a7, 4
   ecall
 
-  li a0, 2
+  li a0, 3
   call    randomizer
 
-  la      t0, player_strategy 
+  la      t0, player_strategy
   sw      a1, 4(t0)
 
   # Imprime: " O jogador 2 escolheu: "
@@ -566,8 +567,15 @@ draw_health_load_j1_strat:
 draw_health_check_name:
   li      t1, 2
   beq     s2, t1, draw_health_print_name_smart
+  li      t1, 3
+  beq     s2, t1, draw_health_print_name_troll
 draw_health_print_name_random:
   la      a0, name_aleatorio
+  li      a7, 4
+  ecall
+  j draw_health_print_name
+draw_health_print_name_troll:
+  la      a0, name_troll
   li      a7, 4
   ecall
   j draw_health_print_name
@@ -1187,13 +1195,87 @@ calculate_success:
 decision:
   startF 
   call detect_strategy
-  li t1, 1 
+  li t1, 1
   beq a0, t1, decision_random
+  li t1, 3
+  beq a0, t1, decision_troll
   j decision_smart
 decision_random:
   li a0, 6
   call randomizer
   j decision_end
+
+decision_troll:
+  # usa as habilidades pra counterar a
+  # ia "inteligente"
+  la t0, players_health
+  la t1, players_mp
+  la t2, player_turn
+
+  lw t3, 0(t2) # turno
+  mv a0, t3
+  xori a0, a0, 1 # inverte turno pra pegar o inimigo
+  slli a0, a0, 2 # * 4
+
+
+  mv a1, t0
+  add a1, a1, a0 # vida do inimigo
+  lw a2, 0(a1) # carrega em a2
+
+  mv a1, t1 # agora vamos pegar o mp
+  add a1, a1, a0
+  lw a3, 0(a1) # mp do inimigo
+
+  slli t3, t3, 2 # turno meu * 4
+  add t0, t0, t3 # minha vida
+  add t1, t1, t3 # meu mp
+
+  lw t4, 0(t1) # mp
+  lw t5, 0(t0) # vida
+
+  # infelizmente essa estrategia tambem copia
+  # a estrategia inteligente,
+  # se o inimigo estiver fraco ele executa ele
+
+
+  li t6, 150 # preço do execute
+  blt t4, t6, decision_troll_checks
+  li t6, 50
+  bge a2, t6, decision_troll_checks
+  j decision_smart_i_can_kill
+  # e ele pula pra branch do decision_smart :p
+
+decision_troll_checks:
+  li t6, 50
+  ble t5, t6, decision_troll_check_enemy_mp
+decision_troll_check_enemy_mp:
+  li t6, 150
+  bge a3, t6, decision_troll_prepare_against_execute
+  j decision_troll_not_execute
+decision_troll_prepare_against_execute:
+  li a0, 6
+  endF
+  ret
+decision_troll_not_execute:
+  # pensando nisso logicamente,
+  # se o inimigo nao tem mp, roube mp dele
+  # e as vezes de dano pra enfraquecer ele
+  # ja que ele usa o roubo de alma e o roubo tambem
+  # tira vida. logo,
+  li a0, 6
+  call randomizer
+  li t6, 3
+  bge a1, t6, decision_troll_soul_suck
+  j decision_troll_attack
+decision_troll_soul_suck:
+  li a0, 4
+  endF
+  ret
+decision_troll_attack:
+  li a0, 1
+  endF
+  ret
+
 decision_smart: 
   # eu escrevi essa estrategia 
   # ela se consiste em usar roubo de alma até poder usar execute 
