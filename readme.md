@@ -1,57 +1,53 @@
-# Extremis Lite: When Randomness Breaks Logic
+# Extremis Lite: How a Button-Mashing AI Broke My RISC-V RPG
 
-> University project (ORG 2026.1). An adversarial RPG combat simulator and Monte Carlo engine written entirely in RISC-V assembly.
+> University project (ORG 2026.1) — An RPG combat simulator and Monte Carlo engine written entirely in RISC-V assembly.
 
 https://github.com/user-attachments/assets/379521ff-3ec5-4981-8845-8c0878b5ebea
 
-## The Premise
+## The Setup
 
-What happens when you build competing AI state machines in a low-level architecture and force them to fight 10,000 times? 
+I built an RPG combat engine from scratch in raw RISC-V assembly. The goal was to write three distinct AI state machines, throw them into a headless emulator, and run 10,000 automated matches to see which strategy came out on top.
 
-Extremis Lite is a custom RPG combat engine featuring three Undertale characters, built from scratch in RISC-V assembly. While it features a fully animated ASCII spectator mode, the core of the project is the headless benchmark simulator. It runs thousands of automated matches, parsing RNG and decision trees to find out which algorithmic strategy is objectively the best.
+The combat revolves around a strict action economy. MP regenerates slowly, but can be overcharged using specific skills. 
 
-## The Action Economy
-
-Each turn costs one action. MP regenerates natively at +2 per turn, capped at 100 (unless overcharged via *Soul Suck*).
-
-| Skill | Cost | Mechanics |
+| Skill | Cost | What it does |
 |---|---|---|
-| **Attack** | free | Rolls a standard 1d20. `< 10` misses, `10+` hits, `20` crits for double damage. Attacking a defending target triggers a block/riposte check. |
-| **Defend** | free | Enters a defensive stance. Blocks incoming damage, with a chance to trigger a riposte counter-attack on a high roll. |
-| **Absolute Grit** | 20 MP | Bypasses RNG entirely to force a guaranteed critical hit. |
-| **Soul Suck** | free | The caster takes 1–12 recoil damage to steal 4× that amount in MP from the enemy. The only way to bypass the 100 MP cap and reach the 150 MP execution threshold. |
-| **Final Execution** | 150 MP | The ultimate nuke (800% damage). Fails completely if the target is above 50% HP, wasting the MP. |
-| **Mirror Shield** | 30 MP | Raises a shield that reflects the next incoming damage source back at the attacker. |
+| **Attack** | free | Rolls a 1d20. `< 10` misses, `10+` hits, `20` crits for double damage. |
+| **Defend** | free | Blocks incoming damage. High rolls trigger a counter-attack. |
+| **Absolute Grit** | 20 MP | Bypasses the dice for a guaranteed critical hit. |
+| **Soul Suck** | free | The caster takes 1–12 recoil damage to steal 4× that amount in MP. The only way to bypass the 100 MP cap. |
+| **Final Execution** | 150 MP | An 800% damage nuke. Fails if the target is above 50% HP. |
+| **Mirror Shield** | 30 MP | Reflects the next incoming attack back at the caster. |
 
-## The Algorithmic Archetypes
+## The Contenders
 
-To test the combat engine, I wrote three distinct AI strategies, each representing a different approach to systems logic.
+I wrote three bots, each with a completely different brain:
 
-* **Flowey (The Stochastic Algorithm):** Plays entirely at random. He evaluates no variables and follows no pattern, relying entirely on a custom `xorshift` pseudorandom number generator to pick his moves.
-* **Chara (The First-Order Logic):** The "smart" AI. Her algorithm aggressively optimizes for a single win condition: hoard MP using *Soul Suck* until she hits 150, chip the enemy below 50% HP, and land the *Final Execution*. 
-* **Toby (The Second-Order Logic):** Built explicitly as a hard-counter to Chara. He monitors the enemy's MP gauge. If they approach the 150 MP execution threshold, he holds his *Mirror Shield* to reflect the incoming nuke.
+* **Flowey (The Chaos):** Pure RNG. He evaluates nothing and just rolls a random number to pick his next move.
+* **Chara (The Try-Hard):** She optimizes for one combo: spam *Soul Suck* until she hits 150 MP, chip the enemy below 50% HP, and drop the *Final Execution*. In the code the strategy is also named smart, but it is not quite so. 
+* **Toby (The Hard-Counter):** Built specifically to farm Chara. He watches her MP bar. If she gets close to 150, he holds up his *Mirror Shield* and waits for her to nuke herself. It is also capable of using final execution when the enemy has low HP, so beyond countering Chara, it is also a decent strategy overall.
 
-## The Benchmark: Over-optimization Creates Fragility
+## The Benchmark Results
 
-After compiling the logic and running a 10,000-match Monte Carlo simulation via headless RARS, the results revealed a fascinating reality about algorithmic design.
+After running 10,000 matches on Terminal using rars.jar, the jar from the Risc-V Java-based simulator RARS, the results came back. 
 
-| Character | Win Rate | Strategy |
-|-----------|----------|----------|
-| **Flowey** | ~52% | Pure Randomness |
-| **Toby** | ~29% | Reactive Counter-Logic |
-| **Chara** | ~17% | Proactive Optimization |
+| Character | Win Rate |
+|-----------|----------|
+| **Flowey** | ~52% |
+| **Toby** | ~29% |
+| **Chara** | ~17% |
 
-**The dumbest AI won the absolute majority.** Here is the architectural autopsy of why:
+The dumbest AI won the absolute majority of the games. 
 
-Chara's dismal 17% win rate exposes the fatal flaw of greedy algorithms. To reach her 150 MP win condition, she is forced to spam *Soul Suck*, which inherently deals recoil damage. In the pursuit of the perfect combo, she constantly bleeds her own health. Often, Toby simply raises his *Mirror Shield*, and Chara's rigid logic forces her to keep casting *Soul Suck* until the recoil damage literally makes her kill herself.
+Chara's 17% win rate exposes the problem with rigid, greedy combos. To reach 150 MP, she has to take recoil damage from *Soul Suck*. Often, Toby just holds up his shield, and Chara's script forces her to keep draining her own health until she literally kills herself before she can even cast her ultimate. 
 
-Toby's 29% perfectly reflects his specialized nature. He farms Chara because his algorithm is designed to exploit hers. But against Flowey, Toby's complex `if/else` checks for the 150 MP threshold are useless. Toby ends up playing passively, waiting for an execution that never comes.
+Toby's 29% comes from successfully baiting Chara. But against Flowey, Toby's victories are not assured. He can play really well if Flowey uses execute and acts as he plans, but if that doesn't happen, he can lose dramatically. Toby is wired to wait for an ultimate attack—so he just stands there, playing passively, while Flowey randomly crits him to death.
 
-Flowey’s 52% supremacy proves that **predictability is a vulnerability**. Flowey never takes unnecessary recoil damage trying to optimize a combo. He just throws high-value moves the second the RNG allows it. Any strategy that relies on predicting enemy behavior completely falls apart when the enemy has no behavior. 
+Flowey won 52% of the time because having no strategy is impossible to counter-read consistently. He never takes recoil damage trying to set up a massive play; he just throws out high-value moves by accident. It turns out, if your entire codebase relies on predicting enemy behavior, you automatically lose to an enemy that does things for no reason.
 
-## Running the Simulator
+## Running It
 
-To compile and run the engine yourself:
+To compile the assembly and run the engine locally:
 
 ```sh
 make simulate
