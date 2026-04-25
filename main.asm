@@ -507,7 +507,7 @@ randomizer:
   ecall
   sw      a0, 0(t4)
 
-  # nova seed = (current_time * xorshift) XOR xorshift
+  # nova seed mistura o tempo atual com o xorshift
   # o XOR garante que a seed nunca vira zero mesmo se o mul der overflow
   mul     t5, a0, t0
   xor     t5, t5, t0
@@ -827,6 +827,18 @@ game_loop_start:
   j game_loop_start
 
 game_loop_p1_died:
+  # jogador 2 venceu: incrementa vitoria da estrategia dele
+  la t0, player_strategy
+  lw t1, 4(t0)            # estrategia do jogador 2
+  addi t1, t1, -1         # estrategia, tira 1
+                          # pra poder indexar certo 
+  slli t1, t1, 2          # indice * 4 
+  la t0, vitoria_by_estrategia
+  add t0, t0, t1
+  lw t2, 0(t0)
+  addi t2, t2, 1
+  sw t2, 0(t0)
+
   la t0, modo_play
   lw t0, 0(t0)
   bnez t0, game_loop_end
@@ -836,6 +848,17 @@ game_loop_p1_died:
   j game_loop_end
 
 game_loop_p2_died:
+  # jogador 1 venceu: incrementa vitoria da estrategia dele
+  la t0, player_strategy
+  lw t1, 0(t0)            # estrategia do jogador 1
+  addi t1, t1, -1         # estrategia começa em 1, array começa em 0
+  slli t1, t1, 2          # word offset
+  la t0, vitoria_by_estrategia
+  add t0, t0, t1
+  lw t2, 0(t0)
+  addi t2, t2, 1
+  sw t2, 0(t0)
+
   la t0, modo_play
   lw t0, 0(t0)
   bnez t0, game_loop_end
@@ -873,7 +896,7 @@ game_loop_end:
   li      a7, 4
   ecall
 
-  # vitorias do Flowey (estrategia 1, offset 0)
+  # vitorias do Flowey
   la      a0, name_aleatorio
   li      a7, 4
   ecall
@@ -888,7 +911,7 @@ game_loop_end:
   li      a7, 4
   ecall
 
-  # vitorias do Chara (estrategia 2, offset 4)
+  # vitorias da Chara 
   la      a0, name_smart
   li      a7, 4
   ecall
@@ -903,7 +926,7 @@ game_loop_end:
   li      a7, 4
   ecall
 
-  # vitorias do Toby (estrategia 3, offset 8)
+  # vitorias do Toby 
   la      a0, name_troll
   li      a7, 4
   ecall
@@ -1257,7 +1280,7 @@ do_turn_render_action:
 
     # renderiza um frame completo com sprite + vida + resultado do ataque
     la t0, player_turn
-    lw s4, 0(t0)       # salva o indice do jogador (0=j1, 1=j2)
+    lw s4, 0(t0)       # salva qual jogador é o atual
     call detect_strategy
     mv a1, a0          # estrategia em a1
     mv a0, s4          # indice do jogador em a0
