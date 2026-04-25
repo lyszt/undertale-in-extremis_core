@@ -15,9 +15,9 @@ The combat revolves around a strict action economy. MP regenerates slowly, but c
 | **Attack** | free | Rolls a 1d20. `< 10` misses, `10+` hits, `20` crits for double damage. |
 | **Defend** | free | Blocks incoming damage. High rolls trigger a counter-attack. |
 | **Absolute Grit** | 20 MP | Bypasses the dice for a guaranteed critical hit. |
-| **Soul Suck** | free | The caster takes 1–12 recoil damage to steal 4× that amount in MP. The only way to bypass the 100 MP cap. |
+| **Soul Suck** | free | The caster takes 1–12 recoil damage, drains that same amount from the enemy's MP, and gains 4× it for themselves. The only way to bypass the 100 MP cap. |
 | **Final Execution** | 150 MP | An 800% damage nuke. Fails if the target is above 50% HP. |
-| **Mirror Shield** | 30 MP | Reflects the next incoming attack back at the caster. |
+| **Mirror Shield** | 30 MP | Reflects the next incoming attack back at the attacker. |
 
 ## The Contenders
 
@@ -54,7 +54,7 @@ decision_smart_i_can_kill:
   li a0, 5  # final execution
 ```
 
-**Toby (The Hard-Counter):** Built specifically to farm Chara. He watches her MP bar. If she gets close to 150, he holds up his *Mirror Shield* and waits for her to nuke herself. It is also capable of using Final Execution when the enemy has low HP, so beyond countering Chara, it is also a decent strategy overall.
+**Toby (The Hard-Counter):** Built specifically to farm Chara. He watches both his own HP and the enemy's MP bar. If he is below 50 HP and the enemy is sitting on 150 MP, he raises his *Mirror Shield* and lets the nuke come back. Outside of that window he mixes attacks and Soul Suck, and can also fire off Final Execution himself when the conditions line up.
 
 ```asm
 decision_troll_checks:
@@ -84,7 +84,7 @@ The dumbest AI won the absolute majority of the games.
 
 Chara's 17% win rate exposes the problem with rigid, greedy combos. To reach 150 MP, she has to take recoil damage from *Soul Suck*. Often, Toby just holds up his shield, and Chara's script forces her to keep draining her own health until she literally kills herself before she can even cast her ultimate. 
 
-Toby's 29% comes from successfully baiting Chara. But against Flowey, Toby's victories are not assured. He can play really well if Flowey uses execute and acts as he plans, but if that doesn't happen, he can lose dramatically. Toby is wired to wait for an ultimate attack, so he just stands there, playing passively, while Flowey randomly crits him to death.
+Toby's 29% comes from successfully baiting Chara. Against Flowey it is a different story — the shield condition requires the enemy to be near 150 MP, and Flowey never deliberately builds towards that. The counter never triggers, so Toby just plays his default game of attacking and soul sucking, which gives him no real edge over chaos.
 
 Flowey won 52% of the time because having no strategy is impossible to counter-read consistently. He never takes recoil damage trying to set up a massive play; he just throws out high-value moves by accident. It turns out, if your entire codebase relies on predicting enemy behavior, you automatically lose to an enemy that does things for no reason.
 
