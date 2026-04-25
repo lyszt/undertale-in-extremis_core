@@ -3,6 +3,10 @@
 # Era pra parecer World of Warcraft mas na verdade parece pokemon
   .data
 
+# Coisas matematicas 
+percentage: .string "%\n"
+
+
 # DIVISORES
 deco_vine:      .string " ~<>-~<>-~<>-~<>-~<>-~<>-~<>-~<>-~<>-~<>-~ \n"
 deco_banana:    .string " \_/> \_/> \_/> \_/> \_/> \_/> \_/> \n"
@@ -896,6 +900,9 @@ game_loop_end:
   li      a7, 4
   ecall
 
+  la s0, partidas_simuladas
+  lw s0, 0(s0)
+
   # vitorias do Flowey
   la      a0, name_aleatorio
   li      a7, 4
@@ -905,13 +912,14 @@ game_loop_end:
   ecall
   la      t0, vitoria_by_estrategia
   lw      a0, 0(t0)
+  div     a0, s0, a0 # porcentagem de vitorias
   li      a7, 1
   ecall
-  la      a0, newline
+  la      a0, percentage
   li      a7, 4
   ecall
 
-  # vitorias da Chara 
+  # vitorias da Chara
   la      a0, name_smart
   li      a7, 4
   ecall
@@ -920,13 +928,14 @@ game_loop_end:
   ecall
   la      t0, vitoria_by_estrategia
   lw      a0, 4(t0)
+  div     a0, s0, a0 # porcentagem de vitorias
   li      a7, 1
   ecall
-  la      a0, newline
+  la      a0, percentage
   li      a7, 4
   ecall
 
-  # vitorias do Toby 
+  # vitorias do Toby
   la      a0, name_troll
   li      a7, 4
   ecall
@@ -935,9 +944,10 @@ game_loop_end:
   ecall
   la      t0, vitoria_by_estrategia
   lw      a0, 8(t0)
+  div     a0, s0, a0 # porcentagem de vitorias
   li      a7, 1
   ecall
-  la      a0, newline
+  la      a0, percentage
   li      a7, 4
   ecall
 
