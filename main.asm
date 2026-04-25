@@ -1449,9 +1449,9 @@ do_check_mirror_shield:
   lw t2, 0(t0)
   xori t2, t2, 1 
 
-  slli t2, t2, 4
+  slli t2, t2, 2
   la t0, mirror_shield_status
-  add t0, t0, t2 
+  add t0, t0, t2
   lw t1, 0(t0)
   
   bnez t1, do_check_mirror_shield_true 
