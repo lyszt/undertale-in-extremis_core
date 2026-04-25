@@ -23,9 +23,52 @@ The combat revolves around a strict action economy. MP regenerates slowly, but c
 
 I wrote three bots, each with a completely different brain:
 
-* **Flowey (The Chaos):** Pure RNG. He evaluates nothing and just rolls a random number to pick his next move.
-* **Chara (The Try-Hard):** She optimizes for one combo: spam *Soul Suck* until she hits 150 MP, chip the enemy below 50% HP, and drop the *Final Execution*. In the code the strategy is also named smart, but it is not quite so. 
-* **Toby (The Hard-Counter):** Built specifically to farm Chara. He watches her MP bar. If she gets close to 150, he holds up his *Mirror Shield* and waits for her to nuke herself. It is also capable of using final execution when the enemy has low HP, so beyond countering Chara, it is also a decent strategy overall.
+**Flowey (The Chaos):** Pure RNG. He evaluates nothing and just rolls a random number to pick his next move.
+
+```asm
+decision_random:
+  li a0, 6
+  call randomizer  # picks a number between 1 and 6, that's the whole strategy
+  j decision_end
+```
+
+**Chara (The Try-Hard):** She optimizes for one combo: spam *Soul Suck* until she hits 150 MP, chip the enemy below 50% HP, and drop the *Final Execution*. In the code the strategy is also named smart, but it is not quite so.
+
+```asm
+decision_smart:
+  # eu escrevi essa estrategia
+  # ela se consiste em usar roubo de alma até poder usar execute
+  # só que pra isso também precisamos sobreviver e diminuir a vida do inimigo pra 50%
+  # sem morrer
+  ...
+  li t6, 150        # preço do execute
+  blt t4, t6, decision_smart_my_mana_is_low   # mp < 150? go farm
+  bge a2, t6, decision_smart_enemy_hp_high    # enemy hp > 50? go bully
+  j decision_smart_i_can_kill                 # otherwise, execute
+
+decision_smart_my_mana_is_low:
+  li a0, 4  # soul suck
+decision_smart_enemy_hp_high:
+  li a0, 2  # absolute grit
+decision_smart_i_can_kill:
+  li a0, 5  # final execution
+```
+
+**Toby (The Hard-Counter):** Built specifically to farm Chara. He watches her MP bar. If she gets close to 150, he holds up his *Mirror Shield* and waits for her to nuke herself. It is also capable of using Final Execution when the enemy has low HP, so beyond countering Chara, it is also a decent strategy overall.
+
+```asm
+decision_troll_checks:
+  li t6, 50
+  ble t5, t6, decision_troll_check_enemy_mp  # am I low enough to worry?
+  j decision_troll_not_execute
+decision_troll_check_enemy_mp:
+  li t6, 150
+  bge a3, t6, decision_troll_prepare_against_execute  # is enemy close to 150 mp?
+  j decision_troll_not_execute
+decision_troll_prepare_against_execute:
+  li a0, 6  # mirror shield
+  ret
+```
 
 ## The Benchmark Results
 
