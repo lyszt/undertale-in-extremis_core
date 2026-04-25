@@ -1,6 +1,6 @@
 # Extremis Lite: How a Button-Mashing AI Broke My RISC-V RPG
 
-> University project (ORG 2026.1) — An RPG combat simulator and Monte Carlo engine written entirely in RISC-V assembly.
+> University project (ORG 2026.1). An RPG combat simulator and Monte Carlo engine written entirely in RISC-V assembly.
 
 https://github.com/user-attachments/assets/379521ff-3ec5-4981-8845-8c0878b5ebea
 
@@ -84,9 +84,37 @@ The dumbest AI won the absolute majority of the games.
 
 Chara's 17% win rate exposes the problem with rigid, greedy combos. To reach 150 MP, she has to take recoil damage from *Soul Suck*. Often, Toby just holds up his shield, and Chara's script forces her to keep draining her own health until she literally kills herself before she can even cast her ultimate. 
 
-Toby's 29% comes from successfully baiting Chara. But against Flowey, Toby's victories are not assured. He can play really well if Flowey uses execute and acts as he plans, but if that doesn't happen, he can lose dramatically. Toby is wired to wait for an ultimate attack—so he just stands there, playing passively, while Flowey randomly crits him to death.
+Toby's 29% comes from successfully baiting Chara. But against Flowey, Toby's victories are not assured. He can play really well if Flowey uses execute and acts as he plans, but if that doesn't happen, he can lose dramatically. Toby is wired to wait for an ultimate attack, so he just stands there, playing passively, while Flowey randomly crits him to death.
 
 Flowey won 52% of the time because having no strategy is impossible to counter-read consistently. He never takes recoil damage trying to set up a massive play; he just throws out high-value moves by accident. It turns out, if your entire codebase relies on predicting enemy behavior, you automatically lose to an enemy that does things for no reason.
+
+## Is This Actually Surprising?
+
+Probably not. Random agents dominating deterministic ones is a well-documented result in strategy simulations.
+
+A Citadel simulation I came across in a study group produced the same pattern: some strategies consistently beat random, some got crushed by it, and some beat certain opponents but lost to others. The rock-paper-scissors dynamic was there, but random still held its ground against most of them.
+
+The difference is that in a richer environment (more strategies, more decision variables, more ways for a smart agent to exploit a random one) the results tend to spread out more. A well-tuned deterministic strategy can carve out a reliable edge if the action space gives it enough to work with.
+
+Here, it probably doesn't. With only six possible actions and a combat system where a single lucky crit can end the match regardless of strategy, the gap between Chara's careful planning and Flowey's random button mashing just isn't that wide. Chara's combo requires several turns of setup, and the RNG has ample opportunity to kill her before she gets there. The action space may simply be too small and too swingy for a greedy strategy to consistently outperform chaos.
+
+In other words: Flowey winning is less of a finding and more of a design constraint. A smarter Chara would need a smarter game to prove it.
+
+## Why These Numbers Are Not Fully Reliable
+
+Before drawing conclusions from the benchmark, there are a few structural biases worth acknowledging.
+
+**The matchups are not isolated.** Both players get a randomly assigned strategy each match, which means the win rates are aggregates across all possible pairings, not clean 1v1 stats. Flowey's 52% includes matches where Flowey fought another Flowey, and in those one of them had to win. To actually know if Chara beats Toby or if Flowey beats everyone equally, you would need to fix the matchup and run each pairing separately.
+
+**Turn order is never rotated.** Player 1 always moves first. In a system where a single crit can end a match, going first is a real edge. The results don't account for this at all.
+
+**The RNG is a custom xorshift seeded from system time.** It works well enough for a university project, but it is not a statistically validated generator. If the distribution of outputs is uneven across the 6 possible actions, Flowey's results are directly affected since his entire strategy is just calling that function.
+
+**The action space is very small.** Six possible actions means any strategy has limited room to differentiate itself from chaos. In a deeper system, Chara's combo might be harder to interrupt, or there could be recovery options that reduce the cost of her setup. Here, the game is just punishing enough that her recoil damage often ends the run before the payoff arrives.
+
+**Chara was likely not designed well enough.** Her strategy has no defensive fallback. If the combo conditions are not met and she is taking heavy damage, she just keeps farming MP anyway. A more robust version would switch to survival mode when below a certain HP threshold, which would likely improve her numbers meaningfully.
+
+The results are directionally interesting but should be read as a snapshot of this specific configuration, not a general statement about strategy vs randomness.
 
 ## Running It
 
