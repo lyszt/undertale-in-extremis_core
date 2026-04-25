@@ -1248,6 +1248,7 @@ decision_troll:
 decision_troll_checks:
   li t6, 50
   ble t5, t6, decision_troll_check_enemy_mp
+  j decision_troll_not_execute
 decision_troll_check_enemy_mp:
   li t6, 150
   bge a3, t6, decision_troll_prepare_against_execute
