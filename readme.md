@@ -84,7 +84,7 @@ The dumbest AI won the absolute majority of the games.
 
 Chara's 17% win rate exposes the problem with rigid, greedy combos. To reach 150 MP, she has to take recoil damage from *Soul Suck*. Often, Toby just holds up his shield, and Chara's script forces her to keep draining her own health until she literally kills herself before she can even cast her ultimate. 
 
-Toby's 29% comes from successfully baiting Chara. Against Flowey it is a different story — the shield condition requires the enemy to be near 150 MP, and Flowey never deliberately builds towards that. The counter never triggers, so Toby just plays his default game of attacking and soul sucking, which gives him no real edge over chaos.
+Toby's 29% comes from successfully baiting Chara. Against Flowey it is a different story: the shield condition requires the enemy to be near 150 MP, and Flowey never deliberately builds towards that. The counter never triggers, so Toby just plays his default game of attacking and soul sucking, which gives him no real edge over chaos.
 
 Flowey won 52% of the time because having no strategy is impossible to counter-read consistently. He never takes recoil damage trying to set up a massive play; he just throws out high-value moves by accident. It turns out, if your entire codebase relies on predicting enemy behavior, you automatically lose to an enemy that does things for no reason.
 
@@ -122,11 +122,11 @@ The obvious next step is getting off RARS entirely. This version runs on a Java-
 
 Beyond performance, the more interesting directions are on the design side:
 
-**More players per match.** Right now it is always 1v1. Adding a third or fourth participant changes the strategic landscape completely — suddenly a counter-strategy has to account for being attacked from two directions at once, and pure randomness becomes harder to sustain.
+**More players per match.** Right now it is always 1v1. Adding a third or fourth participant changes the strategic landscape completely. Suddenly a counter-strategy has to account for being attacked from two directions at once, and pure randomness becomes harder to sustain.
 
 **Machine learning inside the assembly.** The idea is to implement a minimal ML algorithm directly in RISC-V, using matrix operations to let a bot update its own weights based on match outcomes. No external libraries, no high-level runtime, just integer matrix math in registers. Whether this is practical or just an interesting pain to implement is part of the appeal.
 
-**More strategies and a deeper engine.** The current action space is too small for any strategy to meaningfully pull ahead of random. Taking more direct inspiration from World of Warcraft — cooldowns, resource trade-offs, positioning effects, more varied skill interactions — would give well-designed strategies actual room to prove themselves over chaos.
+**More strategies and a deeper engine.** The current action space is too small for any strategy to meaningfully pull ahead of random. Taking more direct inspiration from World of Warcraft (cooldowns, resource trade-offs, positioning effects, more varied skill interactions) would give well-designed strategies actual room to prove themselves over chaos.
 
 The benchmark infrastructure is already there. The bottleneck is the game being deep enough to make the results mean something.
 
