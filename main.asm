@@ -912,7 +912,9 @@ game_loop_end:
   ecall
   la      t0, vitoria_by_estrategia
   lw      a0, 0(t0)
-  div     a0, s0, a0 # porcentagem de vitorias
+  li      t1, 100
+  mul     a0, a0, t1
+  div     a0, a0, s0 # porcentagem de vitorias
   li      a7, 1
   ecall
   la      a0, percentage
@@ -928,7 +930,9 @@ game_loop_end:
   ecall
   la      t0, vitoria_by_estrategia
   lw      a0, 4(t0)
-  div     a0, s0, a0 # porcentagem de vitorias
+  li      t1, 100
+  mul     a0, a0, t1
+  div     a0, a0, s0 # porcentagem de vitorias
   li      a7, 1
   ecall
   la      a0, percentage
@@ -944,7 +948,9 @@ game_loop_end:
   ecall
   la      t0, vitoria_by_estrategia
   lw      a0, 8(t0)
-  div     a0, s0, a0 # porcentagem de vitorias
+  li      t1, 100
+  mul     a0, a0, t1
+  div     a0, a0, s0 # porcentagem de vitorias
   li      a7, 1
   ecall
   la      a0, percentage
