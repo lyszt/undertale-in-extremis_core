@@ -34,6 +34,17 @@ bar_mp_crit:    .string " MP: [* ] "
 action_interface: .string "[ ATTACK ]  [  SKILL  ]  [  DEFEND  ]\n"
 
 
+# Mensagens de Resultado Final
+msg_resultado_titulo:   .string "\n === RESULTADO FINAL === \n"
+msg_resultado_partidas: .string " Partidas simuladas: "
+msg_resultado_vitoria:  .string " vitorias: "
+
+# Mensagens de Selecao de Modo
+msg_titulo_modo:    .string " === MODO DE JOGO === \n"
+msg_modo_opcoes:    .string " [0] Observar partida  [1] Simular (benchmark) \n"
+msg_modo_escolha:   .string " Sua escolha: "
+msg_qtd_partidas:   .string " Quantas partidas simular? "
+
 # Mensagens de Escolha de Estrategia
 msg_titulo_estrategia:  .string " === SELECAO DE ESTRATEGIA === \n"
 msg_j1_estrategia:      .string "\n Escolhendo aleatoriamente a estrategia do Jogador 1...\n"
@@ -316,6 +327,11 @@ defense_fail_bonus: .word 0
 is_defending: .word 0, 0
 mirror_shield_status: .word 0,0
 
+vitoria_by_estrategia: .word 0,0,0 # 1, 2, 3
+partidas_simuladas: .word 0
+partidas_a_simular: .word 10000 # 10k pra comecar
+modo_play: .word 0 # modo de jogo: 0 = observacao, 1 = simulacao (benchmarking)
+
 
 idle_aleatorio_frames:
   .word ascii_aleatorio_idle_1
@@ -370,72 +386,95 @@ _start:
   sw      a0, 0(t3)
   sw a0, 0(t4)
 
-  # imprime: " === SELECAO DE ESTRATEGIA === "
-  la      a0, msg_titulo_estrategia
+  # selecao de modo de jogo
+
+  # imprime o titulo do menu de modo
+  la      a0, msg_titulo_modo
   li      a7, 4
   ecall
 
-# Estrategia do Jogador 1
-  la      a0, msg_j1_estrategia
+  la      a0, msg_modo_opcoes
   li      a7, 4
   ecall
 
-  la      a0, msg_op_aleatoria
+  # imprime o prompt de escolha
+  la      a0, msg_modo_escolha
   li      a7, 4
   ecall
 
+  # le a escolha do usuario como inteiro
+  li      a7, 5
+  ecall
+  mv      t0, a0          # salva escolha em t0
 
+  # se escolheu 1 (benchmark), seta modo_play = 1 e pede partidas
+  bnez    t0, set_modo_benchmark
+
+  # caso contrario (0 ou qualquer outra coisa): modo observacao, modo_play = 0
+set_modo_observacao:
+  la      t1, modo_play
+  sw      x0, 0(t1)       # modo_play = 0
+  j       modo_selecionado
+
+set_modo_benchmark:
+  la      t1, modo_play
+  li      t2, 1
+  sw      t2, 0(t1)       # modo_play = 1
+
+  # pede a quantidade de partidas a simular
+  la      a0, msg_qtd_partidas
+  li      a7, 4
+  ecall
+
+  # le o numero de partidas como inteiro
+  li      a7, 5
+  ecall
+
+  # salva em partidas_a_simular
+  la      t1, partidas_a_simular
+  sw      a0, 0(t1)
+
+modo_selecionado:
+
+reiniciar_partida:
+  # reseta o estado do jogo antes de cada partida
+  la      t0, players_health
+  li      t1, 100
+  sw      t1, 0(t0)
+  sw      t1, 4(t0)
+
+  la      t0, players_mp
+  sw      t1, 0(t0)
+  sw      t1, 4(t0)
+
+  la      t0, player_turn
+  sw      x0, 0(t0)
+
+  la      t0, is_defending
+  sw      x0, 0(t0)
+  sw      x0, 4(t0)
+
+  la      t0, mirror_shield_status
+  sw      x0, 0(t0)
+  sw      x0, 4(t0)
+
+  la      t0, current_state
+  sw      x0, 0(t0)
+
+  la      t0, last_damage
+  sw      x0, 0(t0)
+
+# escolhe estrategia do jogador 1
   li a0, 3
   call    randomizer
-
   la      t0, player_strategy
   sw      a1, 0(t0)
 
-  # Salva o valor em s1 antes de imprimir o texto e o numero
-  mv      s1, a1
-  
-  # Imprime: " O jogador 1 escolheu: "
-  la      a0, msg_j1_escolha
-  li      a7, 4
-  ecall
-  
-  # Imprime o numero da estrategia
-  mv      a1, s1
-  call    print_int
-
-  # Imprime a ASCII art baseada na escolha
-  mv      a1, s1
-  call    print_ascii
-
-# Estrategia do Jogador 2
-  la      a0, msg_j2_estrategia
-  li      a7, 4
-  ecall
-
+# escolhe estrategia do jogador 2
   li a0, 3
   call    randomizer
-
   la      t0, player_strategy
   sw      a1, 4(t0)
-
-  # Imprime: " O jogador 2 escolheu: "
-  la      a0, msg_j2_escolha
-  li      a7, 4
-  ecall
-  
-  # Preserva retorno em s1 para nao perder durante print_int
-  mv      s1, a1
-  
-  call    print_int
-
-  # Imprime a ASCII art baseada na escolha
-  mv      a1, s1
-  call    print_ascii
-
-# imprime: " !!! PREPARE PARA O COMBATE !!! "
-  la      a0, event_alert
-  li      a7, 4
-  ecall
 
   call game_loop
 
@@ -788,17 +827,97 @@ game_loop_start:
   j game_loop_start
 
 game_loop_p1_died:
+  la t0, modo_play
+  lw t0, 0(t0)
+  bnez t0, game_loop_end
   la a0, died_p1
   li a7, 4
   ecall
   j game_loop_end
 
 game_loop_p2_died:
+  la t0, modo_play
+  lw t0, 0(t0)
+  bnez t0, game_loop_end
   la a0, died_p2
   li a7, 4
   ecall
 
 game_loop_end:
+  la t3, partidas_simuladas
+  la t4, partidas_a_simular
+  lw t5, 0(t3)
+  lw t4, 0(t4)
+  addi t5, t5, 1 
+  sw t5, 0(t3) # adiciona + 1 nas partidas simuladas 
+
+  blt t5, t4, reiniciar_partida 
+  # se partidas_simuladas 
+  # menor que  partidas_a_simular, reinicia
+
+  # imprime o placar final
+
+  # titulo
+  la      a0, msg_resultado_titulo
+  li      a7, 4
+  ecall
+
+  # total de partidas simuladas
+  la      a0, msg_resultado_partidas
+  li      a7, 4
+  ecall
+  mv      a0, t5
+  li      a7, 1
+  ecall
+  la      a0, newline
+  li      a7, 4
+  ecall
+
+  # vitorias do Flowey (estrategia 1, offset 0)
+  la      a0, name_aleatorio
+  li      a7, 4
+  ecall
+  la      a0, msg_resultado_vitoria
+  li      a7, 4
+  ecall
+  la      t0, vitoria_by_estrategia
+  lw      a0, 0(t0)
+  li      a7, 1
+  ecall
+  la      a0, newline
+  li      a7, 4
+  ecall
+
+  # vitorias do Chara (estrategia 2, offset 4)
+  la      a0, name_smart
+  li      a7, 4
+  ecall
+  la      a0, msg_resultado_vitoria
+  li      a7, 4
+  ecall
+  la      t0, vitoria_by_estrategia
+  lw      a0, 4(t0)
+  li      a7, 1
+  ecall
+  la      a0, newline
+  li      a7, 4
+  ecall
+
+  # vitorias do Toby (estrategia 3, offset 8)
+  la      a0, name_troll
+  li      a7, 4
+  ecall
+  la      a0, msg_resultado_vitoria
+  li      a7, 4
+  ecall
+  la      t0, vitoria_by_estrategia
+  lw      a0, 8(t0)
+  li      a7, 1
+  ecall
+  la      a0, newline
+  li      a7, 4
+  ecall
+
   endF
   ret
 
@@ -1056,12 +1175,18 @@ do_player_turn:
   j       do_player_2_turn
 
 do_player_1_turn:
+  la      t0, modo_play
+  lw      t0, 0(t0)
+  bnez    t0, do_turn_action  # em benchmark pula a animacao
   li      a0, 0
   call    print_player_ascii
   j do_turn_action
 
 do_player_2_turn:
-  li      a0, 1 
+  la      t0, modo_play
+  lw      t0, 0(t0)
+  bnez    t0, do_turn_action  # em benchmark pula a animacao
+  li      a0, 1
   call    print_player_ascii
   j do_turn_action
 
@@ -1125,6 +1250,11 @@ do_turn_defense:
   call do_defense
 
 do_turn_render_action:
+    # em modo benchmark pula direto pro fim do turno, sem renderizar
+    la t0, modo_play
+    lw t0, 0(t0)
+    bnez t0, do_end_turn
+
     # renderiza um frame completo com sprite + vida + resultado do ataque
     la t0, player_turn
     lw s4, 0(t0)       # salva o indice do jogador (0=j1, 1=j2)
