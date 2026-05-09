@@ -1,14 +1,12 @@
 # Fdb version 4
 ["bibtex relatorio-joao-luis-almeida-santos"] 0 "relatorio-joao-luis-almeida-santos.aux" "relatorio-joao-luis-almeida-santos.bbl" "relatorio-joao-luis-almeida-santos" 0 -1
-  "./citacoes.bib" 1778361345.40787 443 ba5779af76e86d815e76e59c18e387f7 ""
-  "/usr/share/texmf-dist/bibtex/bst/base/unsrt.bst" 1775415801 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "relatorio-joao-luis-almeida-santos.aux" 1778363317.53306 8756 fde2058a7f507265961859a7da8417b3 "pdflatex"
+  "relatorio-joao-luis-almeida-santos.aux" 1778363994.64894 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
   (generated)
   "relatorio-joao-luis-almeida-santos.bbl"
   "relatorio-joao-luis-almeida-santos.blg"
   (rewritten before read)
-["pdflatex"] 1778363313.61753 "/home/kaldwin/Development/Projects/extremis-lite_misc/relatorio/relatorio-joao-luis-almeida-santos.tex" "relatorio-joao-luis-almeida-santos.pdf" "relatorio-joao-luis-almeida-santos" 1778363318.11818 2
-  "/home/kaldwin/Development/Projects/extremis-lite_misc/relatorio/relatorio-joao-luis-almeida-santos.tex" 1778363309.65141 18445 92b19dac36373a7fe6d4ee0dbde5d185 ""
+["pdflatex"] 1778363990.68974 "/home/kaldwin/Development/Projects/extremis-lite_misc/relatorio/relatorio-joao-luis-almeida-santos.tex" "relatorio-joao-luis-almeida-santos.pdf" "relatorio-joao-luis-almeida-santos" 1778363994.96054 2
+  "/home/kaldwin/Development/Projects/extremis-lite_misc/relatorio/relatorio-joao-luis-almeida-santos.tex" 1778363986.87096 18458 76585115906c1f16d4351d37579660c4 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1775415801 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/stix2-type1/stix2-mathcal.enc" 1775415801 3356 2818ff063f8b5d0d850e1203330b9fda ""
   "/usr/share/texmf-dist/fonts/enc/dvips/stix2-type1/stix2-mathex.enc" 1775415801 3374 7b7c21d9493820ef4980dfa6fd22840f ""
@@ -277,9 +275,9 @@
   "_minted/trac.style.minted" 1778357211.85651 6019 f081d64870fff92ff8299f9bc2f76031 ""
   "images/jogo.png" 1778356728.15351 19151 2ae26313c52675d4f08954375dd02fb9 ""
   "lettersp.sty" 1778354843.97526 12163 b6de1fa5e93e58dc68ba3c77a1af2e61 ""
-  "relatorio-joao-luis-almeida-santos.aux" 1778363317.53306 8756 fde2058a7f507265961859a7da8417b3 "pdflatex"
-  "relatorio-joao-luis-almeida-santos.bbl" 1778363309.95998 347 c49a19f2f88610bcb72591987fb0d160 "bibtex relatorio-joao-luis-almeida-santos"
-  "relatorio-joao-luis-almeida-santos.tex" 1778363309.65141 18445 92b19dac36373a7fe6d4ee0dbde5d185 ""
+  "relatorio-joao-luis-almeida-santos.aux" 1778363994.64894 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "relatorio-joao-luis-almeida-santos.bbl" 1778363348.71439 347 c49a19f2f88610bcb72591987fb0d160 "bibtex relatorio-joao-luis-almeida-santos"
+  "relatorio-joao-luis-almeida-santos.tex" 1778363986.87096 18458 76585115906c1f16d4351d37579660c4 ""
   (generated)
   "relatorio-joao-luis-almeida-santos.aux"
   "relatorio-joao-luis-almeida-santos.log"
