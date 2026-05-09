@@ -334,7 +334,7 @@ mirror_shield_status: .word 0,0
 vitoria_by_estrategia: .word 0,0,0 # 1, 2, 3
 partidas_simuladas: .word 0
 partidas_a_simular: .word 10000 # 10k pra comecar
-modo_play: .word 0 # modo de jogo: 0 = observacao, 1 = simulacao (benchmarking)
+modo_play: .word 0 # modo de jogo: 0 = observacao, 1 = simulacao 
 
 
 idle_aleatorio_frames:
@@ -1376,7 +1376,7 @@ decision_random:
 
 decision_troll:
   # usa as habilidades pra counterar a
-  # ia "inteligente"
+  # ia 
   la t0, players_health
   la t1, players_mp
   la t2, player_turn

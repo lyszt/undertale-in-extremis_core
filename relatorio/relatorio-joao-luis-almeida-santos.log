@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.4.8)  9 MAY 2026 18:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.4.8)  9 MAY 2026 18:49
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1352,7 +1352,25 @@ Package: afterpage 2023/07/04 v1.08 After-Page Package (DPC)
 \AP@partial=\box151
 \AP@footins=\box152
 ))
-(/usr/share/texmf-dist/tex/latex/minted/minted.sty
+(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+positioning.code.tex
+File: tikzlibrarypositioning.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+shapes.geometric.code.tex
+File: tikzlibraryshapes.geometric.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(/usr/share/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.geomet
+ric.code.tex
+File: pgflibraryshapes.geometric.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+))
+(/usr/share/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.meta.code.tex
+File: pgflibraryarrows.meta.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfarrowinset=\dimen368
+\pgfarrowlength=\dimen369
+\pgfarrowwidth=\dimen370
+\pgfarrowlinewidth=\dimen371
+) (/usr/share/texmf-dist/tex/latex/minted/minted.sty
 Package: minted 2026/03/03 v3.8.0 Yet another Pygments shim for LaTeX
 
 (/usr/share/texmf-dist/tex/generic/catchfile/catchfile.sty
@@ -1380,16 +1398,16 @@ Package: lineno 2026/02/16 line numbers on paragraphs v5.7
 \linenopenalty=\count477
 \output=\toks75
 \linenoprevgraf=\count478
-\linenumbersep=\dimen368
-\linenumberwidth=\dimen369
+\linenumbersep=\dimen372
+\linenumberwidth=\dimen373
 \c@linenumber=\count479
 \c@pagewiselinenumber=\count480
 \c@LN@truepage=\count481
 \c@internallinenumber=\count482
 \c@internallinenumbers=\count483
-\quotelinenumbersep=\dimen370
-\bframerule=\dimen371
-\bframesep=\dimen372
+\quotelinenumbersep=\dimen374
+\bframerule=\dimen375
+\bframesep=\dimen376
 \bframebox=\box154
 \@LN@amsmath@ams@eqpen=\count484
 )
@@ -1404,21 +1422,21 @@ Package: lineno 2026/02/16 line numbers on paragraphs v5.7
 \c@FV@HighlightLinesStop=\count490
 \FV@LoopCount=\count491
 \FV@NCharsBox=\box157
-\FV@BreakIndent=\dimen373
+\FV@BreakIndent=\dimen377
 \FV@BreakIndentNChars=\count492
-\FV@BreakSymbolSepLeft=\dimen374
+\FV@BreakSymbolSepLeft=\dimen378
 \FV@BreakSymbolSepLeftNChars=\count493
-\FV@BreakSymbolSepRight=\dimen375
+\FV@BreakSymbolSepRight=\dimen379
 \FV@BreakSymbolSepRightNChars=\count494
-\FV@BreakSymbolIndentLeft=\dimen376
+\FV@BreakSymbolIndentLeft=\dimen380
 \FV@BreakSymbolIndentLeftNChars=\count495
-\FV@BreakSymbolIndentRight=\dimen377
+\FV@BreakSymbolIndentRight=\dimen381
 \FV@BreakSymbolIndentRightNChars=\count496
 \c@FancyVerbLineBreakLast=\count497
 \FV@LineBox=\box158
 \FV@LineIndentBox=\box159
 \c@FV@BreakBufferDepth=\count498
-\FV@LineWidth=\dimen378
+\FV@LineWidth=\dimen382
 )
 (/usr/share/texmf-dist/tex/latex/latex2pydata/latex2pydata.sty
 Package: latex2pydata 2026/02/25 v0.7.0 latex2pydata - write data to file in Py
@@ -1438,7 +1456,7 @@ Package shellesc Info: Unrestricted shell escape enabled on input line 75.
 \c@listing=\count500
 )
 LaTeX Font Info:    Trying to load font information for T1+stix2 on input line 
-12.
+13.
 
 (/usr/share/texmf-dist/tex/latex/stix2-type1/t1stix2.fd
 File: t1stix2.fd 2018/04/02 v2.0.0-latex stix2 T1 font definitions
@@ -1454,51 +1472,51 @@ LaTeX Warning: Unused global option(s):
 (./relatorio-joao-luis-almeida-santos.aux)
 \openout1 = `relatorio-joao-luis-almeida-santos.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for LS1/stix2/m/n on input line 12.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for LS1/stix2/m/n on input line 13.
 LaTeX Font Info:    Trying to load font information for LS1+stix2 on input line
- 12.
+ 13.
 
 (/usr/share/texmf-dist/tex/latex/stix2-type1/ls1stix2.fd
 File: ls1stix2.fd 2018/04/02 v2.0.0-latex stix2 LS1 font definitions
 )
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for LS2/stix2/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for LS2/stix2/m/n on input line 13.
 LaTeX Font Info:    Trying to load font information for LS2+stix2 on input line
- 12.
+ 13.
 
 (/usr/share/texmf-dist/tex/latex/stix2-type1/ls2stix2.fd
 File: ls2stix2.fd 2018/04/02 v2.0.0-latex stix2 LS2 font definitions
 )
-LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    ... okay on input line 13.
 
 (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count502
-\scratchdimen=\dimen379
+\scratchdimen=\dimen383
 \scratchbox=\box160
 \nofMPsegments=\count503
 \nofMParguments=\count504
 \everyMPshowfont=\toks79
 \MPscratchCnt=\count505
-\MPscratchDim=\dimen380
+\MPscratchDim=\dimen384
 \MPnumerator=\count506
 \makeMPintoPDFobject=\count507
 \everyMPtoPDFconversion=\toks80
@@ -1511,22 +1529,22 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring ON on input line 12.
+Package hyperref Info: Link coloring ON on input line 13.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package microtype Info: Patching varwidth to enable character protrusion.
-\MT@vwid@leftmargin=\dimen381
-\MT@vwid@rightmargin=\dimen382
-LaTeX Info: Redefining \microtypecontext on input line 12.
-Package microtype Info: Applying patch `item' on input line 12.
-Package microtype Info: Applying patch `toc' on input line 12.
-Package microtype Info: Applying patch `eqnum' on input line 12.
-Package microtype Info: Applying patch `footnote' on input line 12.
-Package microtype Info: Applying patch `verbatim' on input line 12.
-LaTeX Info: Redefining \microtypesetup on input line 12.
+\MT@vwid@leftmargin=\dimen385
+\MT@vwid@rightmargin=\dimen386
+LaTeX Info: Redefining \microtypecontext on input line 13.
+Package microtype Info: Applying patch `item' on input line 13.
+Package microtype Info: Applying patch `toc' on input line 13.
+Package microtype Info: Applying patch `eqnum' on input line 13.
+Package microtype Info: Applying patch `footnote' on input line 13.
+Package microtype Info: Applying patch `verbatim' on input line 13.
+LaTeX Info: Redefining \microtypesetup on input line 13.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1572,58 +1590,58 @@ File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Command `\dddot' is already robust on input line 12.
-LaTeX Info: Command `\ddddot' is already robust on input line 12.
+LaTeX Info: Command `\dddot' is already robust on input line 13.
+LaTeX Info: Command `\ddddot' is already robust on input line 13.
 \c@lstlisting=\count508
-LaTeX Font Info:    Calculating math sizes for size <18> on input line 21.
+LaTeX Font Info:    Calculating math sizes for size <18> on input line 22.
 LaTeX Font Info:    Trying to load font information for LS1+stix2scr on input l
-ine 21.
+ine 22.
 (/usr/share/texmf-dist/tex/latex/stix2-type1/ls1stix2scr.fd
 File: ls1stix2scr.fd 2018/04/02 v2.0.0-latex stix2 script LS1 font definitions
 )
 LaTeX Font Info:    Trying to load font information for LS2+stix2ex on input li
-ne 21.
+ne 22.
 
 (/usr/share/texmf-dist/tex/latex/stix2-type1/ls2stix2ex.fd
 File: ls2stix2ex.fd 2018/04/02 v2.0.0-latex stix2 extentions LS2 font definitio
 ns
 )
 LaTeX Font Info:    Trying to load font information for LS1+stix2frak on input 
-line 21.
+line 22.
 
 (/usr/share/texmf-dist/tex/latex/stix2-type1/ls1stix2frak.fd
 File: ls1stix2frak.fd 2018/04/02 v2.0.0-latex stix2 fraktur LS1 font definition
 s
 )
 LaTeX Font Info:    Trying to load font information for LS1+stix2bb on input li
-ne 21.
+ne 22.
 
 (/usr/share/texmf-dist/tex/latex/stix2-type1/ls1stix2bb.fd
 File: ls1stix2bb.fd 2018/04/02 v2.0.0-latex stix2 blackboard LS1 font definitio
 ns
 )
 LaTeX Font Info:    Trying to load font information for LS2+stix2cal on input l
-ine 21.
+ine 22.
 
 (/usr/share/texmf-dist/tex/latex/stix2-type1/ls2stix2cal.fd
 File: ls2stix2cal.fd 2018/04/02 v2.0.0-latex stix2 calligraphic LS2 font defini
 tions
 )
 LaTeX Font Info:    Trying to load font information for LS1+stix2sf on input li
-ne 21.
+ne 22.
 
 (/usr/share/texmf-dist/tex/latex/stix2-type1/ls1stix2sf.fd
 File: ls1stix2sf.fd 2018/04/02 v2.0.0-latex stix2 sans-serif LS1 font definitio
 ns
 )
 LaTeX Font Info:    Trying to load font information for LS2+stix2tt on input li
-ne 21.
+ne 22.
 
 (/usr/share/texmf-dist/tex/latex/stix2-type1/ls2stix2tt.fd
 File: ls2stix2tt.fd 2018/04/02 v2.0.0-latex stix2 typewriter LS2 font definitio
 ns
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 21.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 22.
 
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -1632,7 +1650,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (/usr/share/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 21.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 22.
 
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -1643,35 +1661,35 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@ifnextchar' on input line 21.
+(hyperref)                removing `\@ifnextchar' on input line 22.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<let>-command' on input line 21.
+(hyperref)                removing `\<let>-command' on input line 22.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<let>-command' on input line 21.
+(hyperref)                removing `\<let>-command' on input line 22.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\afterassignment' on input line 21.
+(hyperref)                removing `\afterassignment' on input line 22.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<let>-command' on input line 21.
+(hyperref)                removing `\<let>-command' on input line 22.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 21.
+(hyperref)                removing `\<def>-command' on input line 22.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@thanks' on input line 21.
+(hyperref)                removing `\@thanks' on input line 22.
 
-LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 21.
+LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 22.
 
-Underfull \hbox (badness 10000) in paragraph at lines 21--21
+Underfull \hbox (badness 10000) in paragraph at lines 22--22
 [][]\T1/stix2/m/n/7 Código fonte disponível em: [][]$https : / / github . com /
  lyszt / undertale-[]in-[]extremis \
  []
@@ -1679,49 +1697,49 @@ Underfull \hbox (badness 10000) in paragraph at lines 21--21
 <images/jogo.png, id=9, 548.0475pt x 310.91156pt>
 File: images/jogo.png Graphic file (type png)
 <use images/jogo.png>
-Package pdftex.def Info: images/jogo.png  used on input line 26.
+Package pdftex.def Info: images/jogo.png  used on input line 27.
 (pdftex.def)             Requested size: 244.69371pt x 138.81775pt.
 
 Package caption Warning: \setcaptiontype
-(caption)                outside box or environment on input line 42.
+(caption)                outside box or environment on input line 43.
 See the caption package documentation for explanation.
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 42.
+(caption)                particular \caption on input line 43.
 See the caption package documentation for explanation.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 30--42
+Underfull \hbox (badness 10000) in paragraph at lines 31--43
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 30--42
+Underfull \hbox (badness 10000) in paragraph at lines 31--43
 
  []
 
 
-Underfull \hbox (badness 10000) detected at line 42
+Underfull \hbox (badness 10000) detected at line 43
 []
  []
 
 
-Underfull \hbox (badness 1371) in paragraph at lines 49--49
+Underfull \hbox (badness 1371) in paragraph at lines 50--50
 []|\T1/stix2/m/n/8 Bloqueia o próx-imo ataque. Contra-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 52--52
+Underfull \hbox (badness 10000) in paragraph at lines 53--53
 []|\T1/stix2/m/n/8 Final
  []
 
 
-Overfull \hbox (4.8369pt too wide) in paragraph at lines 44--57
+Overfull \hbox (4.8369pt too wide) in paragraph at lines 45--58
 [][]
  []
 
-LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 62.
+LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 63.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1780,21 +1798,26 @@ tix2-mathex.enc}
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 66.
+(caption)                particular \caption on input line 67.
 See the caption package documentation for explanation.
 
 
-Underfull \hbox (badness 10000) detected at line 66
+Underfull \hbox (badness 10000) detected at line 67
 []
  []
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 81.
+(caption)                particular \caption on input line 82.
 See the caption package documentation for explanation.
 
 
-Underfull \hbox (badness 10000) detected at line 81
+Underfull \hbox (badness 10000) detected at line 82
+[]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 133
 []
  []
 
@@ -1808,12 +1831,12 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 \pydata@fh@0=\write6
 \openout6 = `_926BA1D003D867142E3F30030A84B2C6.data.minted'.
 
-runsystem(latexminted config  --timestamp 20260509183518 926BA1D003D867142E3F30
+runsystem(latexminted config  --timestamp 20260509184911 926BA1D003D867142E3F30
 030A84B2C6)...executed.
 
 
 (./_926BA1D003D867142E3F30030A84B2C6.config.minted)
-runsystem(latexminted cleanconfig  --timestamp 20260509183518 926BA1D003D867142
+runsystem(latexminted cleanconfig  --timestamp 20260509184911 926BA1D003D867142
 E3F30030A84B2C6)...executed.
 
 
@@ -1821,8 +1844,6 @@ E3F30030A84B2C6)...executed.
 (./_minted/2925811DA630729476EB24FB7434B1E5.highlight.minted
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <7> not available
 (Font)              Font shape `T1/cmtt/m/n' tried instead on input line 3.
-LaTeX Font Info:    Font shape `T1/stix2/bx/n' in size <7> not available
-(Font)              Font shape `T1/stix2/b/n' tried instead on input line 14.
 
 Overfull \hbox (261.76537pt too wide) has occurred while \output is active
 []| 
@@ -1830,18 +1851,32 @@ Overfull \hbox (261.76537pt too wide) has occurred while \output is active
 
 [2
 
-{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/tex
-mf-dist/fonts/enc/dvips/stix2-type1/stix2-mathsf.enc}])
-Underfull \hbox (badness 10000) in paragraph at lines 145--151
+{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
+LaTeX Font Info:    Font shape `T1/stix2/bx/n' in size <7> not available
+(Font)              Font shape `T1/stix2/b/n' tried instead on input line 14.
+)
+Underfull \hbox (badness 10000) in paragraph at lines 185--191
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 145--151
+Underfull \hbox (badness 10000) in paragraph at lines 185--191
 
  []
 
-(./_minted/AE38398DF34EAABE86692C8720227FE4.highlight.minted)
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+(./_minted/AE38398DF34EAABE86692C8720227FE4.highlight.minted
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (261.76537pt too wide) has occurred while \output is active
+[]| 
+ []
+
+[3{/usr/share/texmf-dist/fonts/enc/dvips/stix2-type1/stix2-mathsf.enc}])
 (./_minted/1AFF774913D56AEFEE621D8FE98547BC.highlight.minted
 
 ! LaTeX Error: Invalid UTF-8 byte sequence (Ã\FancyVerbBreakAnywhereBreak).
@@ -2264,22 +2299,41 @@ or specify an encoding such as \usepackage [latin1]{inputenc}
 in the document preamble.
 Alternatively, save the file in UTF-8 using your editor or another tool
 
-) (./_minted/B7D2A5C43BA1D2FCBC7A3C79C8A4D605.highlight.minted)
-Underfull \hbox (badness 1178) in paragraph at lines 213--214
-\T1/stix2/m/n/9.03374 para leitura do tempo at-u-al-izava a se-mente do ger-ado
-r, cor-
- []
+)
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-(./_minted/80837BD98C4293B3D477922393D3104D.highlight.minted
+
+(./_minted/B7D2A5C43BA1D2FCBC7A3C79C8A4D605.highlight.minted)
+(./_minted/7DF71076FC924C764AE506F6335AFC5D.highlight.minted
 Overfull \hbox (261.76537pt too wide) has occurred while \output is active
 []| 
  []
 
-[3]) (./_minted/D3BE35AEA5A0BABB4B8C04633E52572C.highlight.minted)
+[4])
+Underfull \hbox (badness 1178) in paragraph at lines 286--287
+\T1/stix2/m/n/9.03374 para leitura do tempo at-u-al-izava a se-mente do ger-ado
+r, cor-
+ []
+
+(./_minted/80837BD98C4293B3D477922393D3104D.highlight.minted)
+(./_minted/D3BE35AEA5A0BABB4B8C04633E52572C.highlight.minted)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-(./relatorio-joao-luis-almeida-santos.bbl
+Underfull \hbox (badness 2865) in paragraph at lines 334--335
+\T1/stix2/m/n/9.03374 Em con-formi-dade com a ob-ser-vação da co-manda, segue a
+
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (261.76537pt too wide) has occurred while \output is active
+[]| 
+ []
+
+[5] (./relatorio-joao-luis-almeida-santos.bbl
 LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 10.
 
 Underfull \hbox (badness 10000) in paragraph at lines 9--12
@@ -2291,24 +2345,22 @@ Overfull \hbox (261.76537pt too wide) has occurred while \output is active
 []| 
  []
 
-[4] (./relatorio-joao-luis-almeida-santos.aux)
+[6
+
+] (./relatorio-joao-luis-almeida-santos.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
  ) 
 Here is how much of TeX's memory you used:
- 40548 strings out of 469515
- 770417 string characters out of 5470808
- 1293717 words of memory out of 5000000
- 68484 multiletter control sequences out of 15000+600000
+ 41578 strings out of 469515
+ 795966 string characters out of 5470808
+ 1333616 words of memory out of 5000000
+ 69487 multiletter control sequences out of 15000+600000
  893612 words of font info for 295 fonts, out of 8000000 for 9000
  40 hyphenation exceptions out of 8191
- 113i,10n,122p,1106b,1121s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 113i,10n,122p,1106b,1187s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist
 , replaced by a fixed one
@@ -2320,11 +2372,11 @@ t/fonts/type1/public/stix2-type1/STIX2Text-Regular.pfb></usr/share/texmf-dist/f
 onts/type1/public/cm-super/sfit0800.pfb></usr/share/texmf-dist/fonts/type1/publ
 ic/cm-super/sfit0900.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sft
 t0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb>
-Output written on relatorio-joao-luis-almeida-santos.pdf (4 pages, 790147 bytes
+Output written on relatorio-joao-luis-almeida-santos.pdf (6 pages, 798204 bytes
 ).
 PDF statistics:
- 148 PDF objects out of 1000 (max. 8388607)
- 118 compressed objects within 2 object streams
- 20 named destinations out of 1000 (max. 500000)
- 13914 words of extra memory for PDF output out of 14400 (max. 10000000)
+ 187 PDF objects out of 1000 (max. 8388607)
+ 155 compressed objects within 2 object streams
+ 30 named destinations out of 1000 (max. 500000)
+ 13970 words of extra memory for PDF output out of 14400 (max. 10000000)
 

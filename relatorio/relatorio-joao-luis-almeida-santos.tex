@@ -1,5 +1,6 @@
 \documentclass[AMA,twocolumn]{USG}
 \usepackage{xcolor}
+\usetikzlibrary{positioning, shapes.geometric, arrows.meta}
 \usepackage{minted}
 \usemintedstyle{trac}
 \setminted{fontsize=\footnotesize, breaklines=true, breakanywhere=true}
@@ -93,6 +94,45 @@ Toby   & Troll    & Monitora o próprio HP e o MP do inimigo. Se estiver abaixo 
 
 
 \section{Desafios e Soluções}
+
+\subsection{Fluxo do Jogo}
+
+O simulador segue um loop de turnos fixo. A cada turno, o bot ativo toma uma decisão com base na sua estratégia, executa a ação, os efeitos são aplicados, o MP regenera e o escudo espelho é verificado. Ao fim, o jogo checa se algum bot morreu. Se não, troca o turno e repete.
+
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=1cm and 1.8cm,
+  state/.style={rectangle, rounded corners=3pt, draw, fill=gray!10, minimum width=2.8cm, minimum height=0.65cm, font=\small, align=center},
+  terminal/.style={rectangle, rounded corners=3pt, draw, fill=black!75, text=white, minimum width=2.8cm, minimum height=0.65cm, font=\small, align=center},
+  dec/.style={diamond, draw, fill=gray!20, minimum width=1cm, minimum height=0.65cm, font=\footnotesize, align=center, inner sep=1pt},
+  arr/.style={->, >=Stealth, thick}
+]
+
+\node[terminal] (start) {Início da Partida};
+\node[state, below=of start] (turn) {Início do Turno};
+\node[state, below=of turn] (decide) {Decisão do Bot};
+\node[state, below=of decide] (action) {Executa Ação};
+\node[state, below=of action] (effects) {Aplica Efeitos};
+\node[state, below=of effects] (endturn) {Fim do Turno\\{\footnotesize MP +2, Mirror Shield}};
+\node[dec, below=0.8cm of endturn] (dead) {Alguém\\morreu?};
+\node[state, below=0.8cm of dead] (swap) {Troca de Turno};
+\node[terminal, right=of dead] (end) {Fim da Partida};
+
+\draw[arr] (start) -- (turn);
+\draw[arr] (turn) -- (decide);
+\draw[arr] (decide) -- (action);
+\draw[arr] (action) -- (effects);
+\draw[arr] (effects) -- (endturn);
+\draw[arr] (endturn) -- (dead);
+\draw[arr] (dead) -- node[right]{\footnotesize Não} (swap);
+\draw[arr] (dead) -- node[above]{\footnotesize Sim} (end);
+\draw[arr] (swap.west) -- ++(-1.8,0) |- (turn.west);
+
+\end{tikzpicture}
+\caption{Fluxo de estados do simulador por turno.}
+\label{fig:statemachine}
+\end{figure*}
 
 \subsection{Randomização}
 Fazer um algoritmo que gerasse números realmente aleatórios foi desafiante. E para esse projeto, eu tive que
@@ -208,6 +248,39 @@ Por conta disso, o modo de benchmarking não tem animações, e portanto também
 
 Os bytes do \texttt{clear\_screen} correspondem à sequência de escape ANSI \texttt{ESC[2J} seguida de \texttt{ESC[H}: o primeiro apaga o conteúdo visível e o segundo move o cursor para o canto superior esquerdo. O efeito visual é o de limpeza, mas o histórico do terminal continua acessível com scroll.
 
+\subsection{Decisões e Estratégias}
+
+Cada turno, a função \texttt{decision} verifica a estratégia do bot ativo e salta para o ramo correspondente. O bot Troll é o mais complexo: ele lê o HP e MP de ambos os jogadores para decidir a ação. Se tiver MP suficiente e o inimigo estiver fraco, executa a Final Execution diretamente pelo ramo da estratégia Inteligente. Se o seu próprio HP estiver abaixo de 50 e o inimigo tiver 150 MP acumulados, levanta o Mirror Shield. Fora dessas condições, mistura ataque e Soul Suck aleatoriamente.
+
+\begin{minted}{asm}
+decision_troll_checks:
+  li t6, 50
+  ble t5, t6, decision_troll_check_enemy_mp
+  j decision_troll_not_execute        # HP alto: nao precisa do escudo
+decision_troll_check_enemy_mp:
+  li t6, 150
+  bge a3, t6, decision_troll_prepare_against_execute
+  j decision_troll_not_execute        # inimigo sem mp: nao vai executar
+decision_troll_prepare_against_execute:
+  li a0, 6                            # Mirror Shield
+  endF
+  ret
+decision_troll_not_execute:
+  li a0, 6
+  call randomizer
+  li t6, 3
+  bge a1, t6, decision_troll_attack
+  j decision_troll_soul_suck
+decision_troll_attack:
+  li a0, 1  # Attack
+  endF
+  ret
+decision_troll_soul_suck:
+  li a0, 4  # Soul Suck
+  endF
+  ret
+\end{minted}
+
 \subsection{Habilidades}
 
 O randomizador calculava o dano em \texttt{t1}, registrador temporário que não é preservado por \texttt{ecall}. No meio da função, um ecall para leitura do tempo atualizava a semente do gerador, corrompendo o valor em \texttt{t1}. O dano resultante virava negativo, e a subtração de HP funcionava como cura.
@@ -255,6 +328,22 @@ Chara  & $\sim$17\% \\
 Flowey, o bot aleatório, ganhou a maioria das partidas. Chara, a mais elaborada, ficou em último. Com apenas seis ações e dano alto por turno, uma estratégia cuidadosa não tem vantagem real sobre o caos. O plano original incluía mais bots, mas balancear se mostrou difícil, e o espaço de ação era pequeno demais para que um quarto bot fizesse algo diferente dos três já existentes.
 
 Na parte técnica, o projeto exigiu lidar com coisas que linguagens de alto nível escondem: stack manual, preservação de registradores e controle de fluxo via saltos. Os bugs foram difíceis de achar justamente por serem silenciosos, como o stack leak da Absolute Grit e o ataque que curava por corrupção de registrador.
+
+\section{Utilização de IA}
+
+Em conformidade com a observação da comanda, segue a declaração explícita dos trechos em que ferramentas de IA generativa foram utilizadas.
+
+\subsection{Pesquisa de conceitos}
+O algoritmo XORShift de Marsaglia foi descoberto a partir de uma consulta ao Gemini sobre geradores de números pseudoaleatórios eficientes para ambientes com recursos limitados. A ferramenta indicou o algoritmo e a referência original, que foi então consultada diretamente.
+
+\subsection{Depuração}
+Em casos onde o bug não era visível pela leitura do código, trechos do assembly foram submetidos ao Gemini para identificar possíveis causas. Foi o caso do ataque que curava, onde a corrupção do registrador \texttt{t1} pelo \texttt{ecall} não era óbvia.
+
+\subsection{Revisão do relatório}
+O texto do relatório passou por revisão gramatical assistida por IA.
+
+\subsection{Geração de frames de animação}
+Os frames ASCII dos personagens foram gerados com auxílio do Gemini Pro 3.0, a partir do ASCII original obtido em \cite{emojicombos_undertale}. O frame base de cada personagem foi editado manualmente para gerar as cinco variações de animação.
 
 \section{Anexos}
 
