@@ -367,16 +367,16 @@ idle_defensivo_frames:
     sw         s1, 8(sp)
     sw         s2, 4(sp)
     sw         s3, 0(sp)
-    .end_macro
+.endm
 
-    .macro     endF
-    lw         ra, 16(sp)
-    lw         s0, 12(sp)
-    lw         s1, 8(sp)
-    lw         s2, 4(sp)
-    lw         s3, 0(sp)
-    addi       sp, sp, 20
-    .end_macro
+	.macro     endF
+	lw         ra, 16(sp)
+	lw         s0, 12(sp)
+	lw         s1, 8(sp)
+	lw         s2, 4(sp)
+	lw         s3, 0(sp)
+	addi       sp, sp, 20
+.endm
 
   .text
   .globl  _start
