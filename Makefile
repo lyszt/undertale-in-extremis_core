@@ -1,4 +1,4 @@
-.PHONY: copy render
+.PHONY: copy render gem5 compile run 
 
 copy:
 	cat main.s | wl-copy
@@ -19,3 +19,7 @@ compile:
 	riscv64-linux-gnu-gcc -nostdlib -static main.s -o ./output/main.s
 run:
 	./vendors/gem5/build/RISCV/gem5.opt ./vendors/models/simple-riscv.py --binary ./output/main.asm
+
+gem5:
+	cd vendors
+	git clone https://github.com/gem5/gem5.git
