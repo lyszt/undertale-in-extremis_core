@@ -18,8 +18,8 @@ render:
 compile:
 	riscv64-linux-gnu-gcc -nostdlib -static main.s -o ./output/main.s
 run:
-	./vendors/gem5/build/RISCV/gem5.opt ./vendors/models/simple-riscv.py --binary ./output/main.asm
+	gem5/build/RISCV/gem5.opt models/simple-riscv.py --binary ./output/main.asm
 
 gem5:
-	cd vendors
 	git clone https://github.com/gem5/gem5.git
+	cd gem 5 && scons build/RISCV/gem5.opt
