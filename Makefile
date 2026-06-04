@@ -21,5 +21,5 @@ run:
 	gem5/build/RISCV/gem5.opt models/simple-riscv.py --binary ./output/main.asm
 
 gem5:
-	git clone https://github.com/gem5/gem5.git
-	cd gem 5 && scons build/RISCV/gem5.opt
+	git clone https://github.com/gem5/gem5.git || true
+	cd gem5 && python -m venv venv && . venv/bin/activate && pip install -r requirements.txt && scons build/RISCV/gem5.opt
