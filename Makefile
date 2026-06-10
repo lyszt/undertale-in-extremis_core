@@ -19,9 +19,10 @@ render:
 	zip trabalho-joao-luis-almeida-santos-20240002508.zip relatorio-joao-luis-almeida-santos.pdf main.s rars.jar Makefile
 
 compile:
-	riscv64-linux-gnu-gcc -nostdlib -static main.s -o ./output/main.s
-run:
-	LD_LIBRARY_PATH=$(PYDIR)/lib gem5/build/RISCV/gem5.opt models/simple-riscv.py --binary ./output/main.asm
+	mkdir -p output
+	riscv64-linux-gnu-gcc -nostdlib -static main_gem5.s -o ./output/main_gem5
+run: compile
+	LD_LIBRARY_PATH=$(PYDIR)/lib gem5/build/RISCV/gem5.opt models/simple-riscv.py --binary ./output/main_gem5
 
 gem5:
 	mise install python@3.13.12
