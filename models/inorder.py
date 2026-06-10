@@ -26,63 +26,50 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""
-This is the RISCV equivalent to `simple.py` (which is designed to run using the
-X86 ISA). More detailed documentation can be found in `simple.py`.
-"""
-
 import m5
 from m5.objects import *
-
-from gem5.components.boards.simple_board import SimpleBoard
-from gem5.components.cachehierarchies.classic.private_l1_private_l2_cache_hierarchy import PrivateL1PrivateL2CacheHierarchy
-from gem5.components.memory.single_channel import SingleChannelDDR3_1600
-from gem5.components.processors.cpu_types import CPUTypes
-from gem5.components.processors.simple_processor import SimpleProcessor
-from gem5.resources.resource import Resource
-from gem5.simulate.simulator import Simulator
-from gem5.isas import ISA
-from gem5.resources.resource import BinaryResource
-
-
-import argparse
+import argparse, os
 
 parser = argparse.ArgumentParser()
-parser.add_argument(
-    "--binary",
-    type=str,
-    required=True,
-    help="Caminho para binario RISC-V"
-)
+parser.add_argument("--binary", type=str, required=True, help="Caminho para binario RISC-V")
+parser.add_argument("--bp", type=str, choices=["local", "bimode"], default="local",
+                    help="Preditor de desvios: local (LocalBP) ou bimode (BiModeBP)")
 args = parser.parse_args()
-binary_path = os.path.abspath(args.binary)
 
+system = System()
+system.clk_domain = SrcClockDomain()
+system.clk_domain.clock = "1GHz"
+system.clk_domain.voltage_domain = VoltageDomain()
+system.mem_mode = "timing"
+system.mem_ranges = [AddrRange("512MB")]
 
-# 1. Escolhemos o modelo O3 (Out-of-Order) para RISC-V
-processor = SimpleProcessor(cpu_type=CPUTypes.TIMING, num_cores=1, isa=ISA.RISCV)
+system.cpu = MinorCPU()
+if args.bp == "bimode":
+    system.cpu.branchPred.conditionalBranchPred = BiModeBP(numThreads=1)
+else:
+    system.cpu.branchPred.conditionalBranchPred = LocalBP(numThreads=1)
 
-# 2. Configurao de Memria e Cache (Obrigatrio para O3)
-cache_hierarchy = PrivateL1PrivateL2CacheHierarchy(l1d_size="32kB", l1i_size="32kB", l2_size="256kB")
-memory = SingleChannelDDR3_1600("1GB")
+system.membus = SystemXBar()
+system.cpu.icache_port = system.membus.cpu_side_ports
+system.cpu.dcache_port = system.membus.cpu_side_ports
+system.cpu.createInterruptController()
 
-# 3. Montagem da placa
-board = SimpleBoard(
-    clk_freq="3GHz",
-    processor=processor,
-    memory=memory,
-    cache_hierarchy=cache_hierarchy,
-)
+system.mem_ctrl = MemCtrl()
+system.mem_ctrl.dram = DDR3_1600_8x8()
+system.mem_ctrl.dram.range = system.mem_ranges[0]
+system.mem_ctrl.port = system.membus.mem_side_ports
+system.system_port = system.membus.cpu_side_ports
 
+binary = os.path.abspath(args.binary)
+system.workload = SEWorkload.init_compatible(binary)
+process = Process()
+process.cmd = [binary]
+system.cpu.workload = process
+system.cpu.createThreads()
 
-#board.workload = SEWorkload.init_compatible(binary)
-#board.set_se_binary_workload(binary)
-
-binary = BinaryResource(local_path=binary_path)
-board.set_se_binary_workload(binary)
-
-# 6. Rodar a simulacao
-simulator = Simulator(board=board)
-print("Iniciando simulacao O3 RISC-V...")
-simulator.run()
-
-print(f"Simulacaoo finalizada no tick {simulator.get_current_tick()}")
+root = Root(full_system=False, system=system)
+m5.instantiate()
+print(f"Beginning simulation! [{args.bp}]")
+exit_event = m5.simulate()
+print("Exiting @ tick %i because %s" % (m5.curTick(), exit_event.getCause()))
+m5.stats.dump()

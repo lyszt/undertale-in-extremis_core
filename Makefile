@@ -21,8 +21,25 @@ render:
 compile:
 	mkdir -p output
 	riscv64-linux-gnu-gcc -nostdlib -static main_gem5.s -o ./output/main_gem5
+
 run: compile
-	LD_LIBRARY_PATH=$(PYDIR)/lib gem5/build/RISCV/gem5.opt models/simple-riscv.py --binary ./output/main_gem5
+	@echo "LocalBP"
+	$(MAKE) run-local
+	@echo "BiModeBP"
+	$(MAKE) run-bimode
+	@cat m5out/stats.txt
+
+run-local: compile
+	mkdir -p m5out/local
+	LD_LIBRARY_PATH=$(PYDIR)/lib gem5/build/RISCV/gem5.opt --outdir=m5out/local \
+		models/inorder.py --binary ./output/main_gem5 --bp local
+
+run-bimode: compile
+	mkdir -p m5out/bimode
+	LD_LIBRARY_PATH=$(PYDIR)/lib gem5/build/RISCV/gem5.opt --outdir=m5out/bimode \
+		models/inorder.py --binary ./output/main_gem5 --bp bimode
+
+run-bp: run-local run-bimode
 
 gem5:
 	mise install python@3.13.12
