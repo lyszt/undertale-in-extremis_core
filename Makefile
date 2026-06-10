@@ -46,7 +46,8 @@ gem5:
 	git clone https://github.com/gem5/gem5.git || true
 	cd gem5 && $(PYDIR)/bin/python3 -m venv --clear venv && . venv/bin/activate && \
 	pip install -r requirements.txt && \
-	LD_LIBRARY_PATH=$(PYDIR)/lib scons build/RISCV/gem5.opt \
+	rm -rf build/RISCV && \
+	CC=clang CXX=clang++ LD_LIBRARY_PATH=$(PYDIR)/lib scons build/RISCV/gem5.opt \
 	-j$(shell nproc) \
 	--ignore-style \
 	PYTHON_CONFIG=$(PYDIR)/bin/python3-config \
