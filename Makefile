@@ -1,5 +1,8 @@
 .PHONY: copy render gem5 compile run 
 
+PYDIR = $(shell mise where python@3.13.12)
+
+
 copy:
 	cat main.s | wl-copy
 simulate:
@@ -18,8 +21,15 @@ render:
 compile:
 	riscv64-linux-gnu-gcc -nostdlib -static main.s -o ./output/main.s
 run:
-	gem5/build/RISCV/gem5.opt models/simple-riscv.py --binary ./output/main.asm
+	LD_LIBRARY_PATH=$(PYDIR)/lib gem5/build/RISCV/gem5.opt models/simple-riscv.py --binary ./output/main.asm
 
 gem5:
+	mise install python@3.13.12
 	git clone https://github.com/gem5/gem5.git || true
-	cd gem5 && python -m venv venv && . venv/bin/activate && pip install -r requirements.txt && scons build/RISCV/gem5.opt
+	cd gem5 && $(PYDIR)/bin/python3 -m venv --clear venv && . venv/bin/activate && \
+	pip install -r requirements.txt && \
+	LD_LIBRARY_PATH=$(PYDIR)/lib scons build/RISCV/gem5.opt \
+	-j$(shell nproc) \
+	--ignore-style \
+	PYTHON_CONFIG=$(PYDIR)/bin/python3-config \
+	LINKFLAGS_EXTRA="-Wl,-rpath,$(PYDIR)/lib"
