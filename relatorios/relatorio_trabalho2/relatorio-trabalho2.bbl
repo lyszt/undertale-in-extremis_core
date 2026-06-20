@@ -1,0 +1,31 @@
+\begin{thebibliography}{}
+
+\bibitem[Binkert et~al. 2011]{binkert2011gem5}
+Binkert, N., Beckmann, B., Black, G., Reinhardt, S.~K., Saidi, A., Basu, A.,
+  Hestness, J., Hower, D.~R., Krishna, T., Sardashti, S., Sen, R., Sewell, K.,
+  Shoaib, M., Vaish, N., Hill, M.~D., and Wood, D.~A. (2011).
+\newblock The gem5 simulator.
+\newblock {\em ACM SIGARCH Computer Architecture News}, 39(2):1--7.
+
+\bibitem[Hennessy and Patterson 2017]{hennessy2017quantitative}
+Hennessy, J.~L. and Patterson, D.~A. (2017).
+\newblock {\em Computer Architecture: A Quantitative Approach}.
+\newblock Morgan Kaufmann, 6 edition.
+
+\bibitem[Lee et~al. 1997]{lee1997bimode}
+Lee, C.-C., Chen, I.-C.~K., and Mudge, T.~N. (1997).
+\newblock The bi-mode branch predictor.
+\newblock In {\em Proceedings of the 30th Annual ACM/IEEE International
+  Symposium on Microarchitecture (MICRO-30)}, pages 4--13.
+
+\bibitem[Marsaglia 2003]{marsaglia2003xorshift}
+Marsaglia, G. (2003).
+\newblock Xorshift rngs.
+
+\bibitem[Smith 1981]{smith1981branch}
+Smith, J.~E. (1981).
+\newblock A study of branch prediction strategies.
+\newblock In {\em Proceedings of the 8th Annual Symposium on Computer
+  Architecture (ISCA)}, pages 135--148.
+
+\end{thebibliography}
