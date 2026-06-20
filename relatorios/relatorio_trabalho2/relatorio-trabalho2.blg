@@ -3,44 +3,44 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: relatorio-trabalho2.aux
 The style file: sbc.bst
 Database file #1: referencias.bib
-You've used 5 entries,
+You've used 4 entries,
             1935 wiz_defined-function locations,
-            505 strings with 4669 characters,
-and the built_in function-call counts, 2346 in all, are:
-= -- 220
-> -- 128
+            497 strings with 4292 characters,
+and the built_in function-call counts, 1677 in all, are:
+= -- 169
+> -- 51
 < -- 5
-+ -- 52
-- -- 46
-* -- 194
-:= -- 405
-add.period$ -- 14
-call.type$ -- 5
-change.case$ -- 48
-chr.to.int$ -- 5
-cite$ -- 5
-duplicate$ -- 88
-empty$ -- 144
-format.name$ -- 53
-if$ -- 458
++ -- 22
+- -- 16
+* -- 121
+:= -- 274
+add.period$ -- 12
+call.type$ -- 4
+change.case$ -- 27
+chr.to.int$ -- 4
+cite$ -- 4
+duplicate$ -- 78
+empty$ -- 129
+format.name$ -- 23
+if$ -- 347
 int.to.chr$ -- 1
 int.to.str$ -- 0
 missing$ -- 5
-newline$ -- 27
-num.names$ -- 15
-pop$ -- 52
+newline$ -- 23
+num.names$ -- 12
+pop$ -- 32
 preamble$ -- 1
-purify$ -- 48
+purify$ -- 27
 quote$ -- 0
-skip$ -- 67
+skip$ -- 60
 stack$ -- 0
-substring$ -- 130
+substring$ -- 118
 swap$ -- 18
 text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 28
+type$ -- 22
 warning$ -- 0
-while$ -- 18
+while$ -- 16
 width$ -- 0
-write$ -- 64
+write$ -- 54

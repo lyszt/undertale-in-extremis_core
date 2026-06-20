@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.6.20)  20 JUN 2026 18:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.6.20)  20 JUN 2026 20:46
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -205,24 +205,24 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 )
 (./relatorio-trabalho2.aux
 Package babel Info: 'brazil' activates 'portuges' shorthands.
-(babel)             Reported on input line 8.
+(babel)             Reported on input line 7.
 )
 \openout1 = `relatorio-trabalho2.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -283,91 +283,70 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 33.
+(Font)              <12> on input line 32.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 33.
+(Font)              <8> on input line 32.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 33.
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 33
-.
+(Font)              <6> on input line 32.
 
-(/usr/share/texmf-dist/tex/latex/psnfss/t1pcr.fd
-File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+Underfull \hbox (badness 1783) in paragraph at lines 50--55
+\T1/ptm/m/n/12 bus-cado es-pe-cu-la-ti-va-mente de-pois dele e custa uma pe-na-
+li-dade de vá-rios ci-clos
+ []
+
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 76
+.
+(/usr/share/texmf-dist/tex/latex/psnfss/t1phv.fd
+File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 )
-LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <12> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 43.
- [1
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 79.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 9
+7.
+
+(/usr/share/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts
 /enc/dvips/base/8r.enc}]
-Underfull \hbox (badness 10000) in paragraph at lines 117--118
-[]\T1/pcr/m/n/10.95 riscv64-linux-gnu-gcc -nostdlib -static main_gem5.s
- []
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 15
+1.
 
+(/usr/share/texmf-dist/tex/latex/psnfss/t1pcr.fd
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+) [2] [3]
+<figuras/wl_mispred.png, id=19, 346.896pt x 195.129pt>
+File: figuras/wl_mispred.png Graphic file (type png)
+<use figuras/wl_mispred.png>
+Package pdftex.def Info: figuras/wl_mispred.png  used on input line 227.
+(pdftex.def)             Requested size: 153.64514pt x 86.4257pt.
 
-Overfull \hbox (13.39844pt too wide) in paragraph at lines 133--135
-[]\T1/pcr/m/n/10.95 processor.cores[0].core.branchPred.conditionalBranchPred
- []
-
-[2]
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 16
-0.
- (/usr/share/texmf-dist/tex/latex/psnfss/t1phv.fd
-File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
-)
-<figuras/mispred.png, id=16, 346.896pt x 195.129pt>
-File: figuras/mispred.png Graphic file (type png)
-<use figuras/mispred.png>
-Package pdftex.def Info: figuras/mispred.png  used on input line 192.
-(pdftex.def)             Requested size: 204.85802pt x 115.23228pt.
-<figuras/branches.png, id=18, 346.896pt x 195.129pt>
-File: figuras/branches.png Graphic file (type png)
-<use figuras/branches.png>
-Package pdftex.def Info: figuras/branches.png  used on input line 198.
-(pdftex.def)             Requested size: 204.85802pt x 115.23228pt.
-<figuras/ipc.png, id=19, 346.896pt x 195.129pt>
-File: figuras/ipc.png Graphic file (type png)
-<use figuras/ipc.png>
-Package pdftex.def Info: figuras/ipc.png  used on input line 217.
-(pdftex.def)             Requested size: 136.57635pt x 76.8235pt.
-<figuras/simtime.png, id=20, 346.896pt x 195.129pt>
-File: figuras/simtime.png Graphic file (type png)
-<use figuras/simtime.png>
-Package pdftex.def Info: figuras/simtime.png  used on input line 223.
-(pdftex.def)             Requested size: 136.57635pt x 76.8235pt.
-<figuras/squashed.png, id=21, 346.896pt x 195.129pt>
-File: figuras/squashed.png Graphic file (type png)
-<use figuras/squashed.png>
-Package pdftex.def Info: figuras/squashed.png  used on input line 229.
-(pdftex.def)             Requested size: 136.57635pt x 76.8235pt.
- [3 <./figuras/mispred.png> <./figuras/branches.png>] (./relatorio-trabalho2.bb
-l) [4 <./figuras/ipc.png> <./figuras/simtime.png> <./figuras/squashed.png>] (./
-relatorio-trabalho2.aux)
+(./relatorio-trabalho2.bbl) [4 <./figuras/wl_mispred.png>]
+(./relatorio-trabalho2.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 5312 strings out of 469495
- 88898 string characters out of 5470098
- 506295 words of memory out of 5000000
- 33911 multiletter control sequences out of 15000+600000
- 663203 words of font info for 79 fonts, out of 8000000 for 9000
+ 5293 strings out of 469495
+ 88341 string characters out of 5470098
+ 506323 words of memory out of 5000000
+ 33893 multiletter control sequences out of 15000+600000
+ 661589 words of font info for 76 fonts, out of 8000000 for 9000
  16 hyphenation exceptions out of 8191
- 72i,8n,79p,269b,360s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts
-/type1/urw/courier/ucrb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/courier/uc
-rr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/share
-/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texmf-dist/fonts/ty
-pe1/urw/times/utmb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmbi8a.p
-fb></usr/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-di
-st/fonts/type1/urw/times/utmri8a.pfb>
-Output written on relatorio-trabalho2.pdf (4 pages, 276050 bytes).
+ 72i,10n,79p,269b,286s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/te
+xmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-dist/fonts/type1/
+urw/helvetic/uhvb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
+></usr/share/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-dis
+t/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times
+/utmri8a.pfb>
+Output written on relatorio-trabalho2.pdf (4 pages, 126674 bytes).
 PDF statistics:
- 79 PDF objects out of 1000 (max. 8388607)
- 42 compressed objects within 1 object stream
+ 56 PDF objects out of 1000 (max. 8388607)
+ 33 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

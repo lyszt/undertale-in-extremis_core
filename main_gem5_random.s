@@ -428,19 +428,16 @@ reiniciar_partida:
   la      t0, last_damage
   sw      x0, 0(t0)
 
-# VARIANTE RANDOM-HEAVY: ambos jogadores usam a estrategia 1 (decision_random,
-# o bot Flowey de RNG puro). Cada escolha de habilidade vira um sorteio
-# uniforme 1-6, tornando os desvios condicionais essencialmente imprevisiveis.
-# (No main_gem5.s original a estrategia e sorteada por partida -> carga mista.)
-# escolhe estrategia do jogador 1
-  li a1, 1
-  la      t0, player_strategy
-  sw      a1, 0(t0)
+# Variante aleatoria: ambos jogadores usam o Flowey (estrategia 1, RNG puro).
+# Assim toda escolha de habilidade e sorteada, sem padrao para o preditor.
 
-# escolhe estrategia do jogador 2
-  li a1, 1
-  la      t0, player_strategy
-  sw      a1, 4(t0)
+  li a1, 1                 # jogador 1 = Flowey
+  la t0, player_strategy
+  sw a1, 0(t0)
+
+  li a1, 1                 # jogador 2 = Flowey
+  la t0, player_strategy
+  sw a1, 4(t0)
 
   call game_loop
 
