@@ -1,6 +1,8 @@
-.PHONY: copy render gem5 compile run 
+.PHONY: copy render render-t2 gem5 compile run
 
 PYDIR = $(shell mise where python@3.13.12)
+RELT2 = relatorios/relatorio_trabalho2
+ZIPT2 = trabalho2-joao-luis-almeida-santos-20240002508.zip
 
 
 copy:
@@ -17,6 +19,18 @@ render:
 	pdfunite capa.pdf relatorio/relatorio-joao-luis-almeida-santos.pdf relatorio-joao-luis-almeida-santos.pdf
 	rm -f trabalho-joao-luis-almeida-santos-20240002508.zip
 	zip trabalho-joao-luis-almeida-santos-20240002508.zip relatorio-joao-luis-almeida-santos.pdf main.s rars.jar Makefile
+
+render-t2:
+	-cd $(RELT2) && pdflatex -shell-escape -interaction=nonstopmode relatorio-trabalho2.tex
+	-cd $(RELT2) && bibtex relatorio-trabalho2
+	-cd $(RELT2) && pdflatex -shell-escape -interaction=nonstopmode relatorio-trabalho2.tex
+	-cd $(RELT2) && pdflatex -shell-escape -interaction=nonstopmode relatorio-trabalho2.tex
+	rm -f $(ZIPT2)
+	zip -j $(ZIPT2) \
+		main_gem5.s \
+		main_gem5_random.s \
+		$(RELT2)/relatorio-trabalho2.pdf \
+		$(RELT2)/relatorio-trabalho2.tex
 
 compile:
 	mkdir -p output

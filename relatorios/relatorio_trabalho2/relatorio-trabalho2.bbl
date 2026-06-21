@@ -13,11 +13,13 @@ Hennessy, J.~L. and Patterson, D.~A. (2017).
 \bibitem[Lee et~al. 1997]{lee1997bimode}
 Lee, C.-C., Chen, I.-C.~K., and Mudge, T.~N. (1997).
 \newblock The bi-mode branch predictor.
-\newblock In {\em Proceedings of the 30th Annual ACM/IEEE International Symposium on Microarchitecture (MICRO-30)}, pages 4--13.
+\newblock In {\em Proceedings of the 30th Annual ACM/IEEE International
+  Symposium on Microarchitecture (MICRO-30)}, pages 4--13.
 
 \bibitem[Smith 1981]{smith1981branch}
 Smith, J.~E. (1981).
 \newblock A study of branch prediction strategies.
-\newblock In {\em Proceedings of the 8th Annual Symposium on Computer Architecture (ISCA)}, pages 135--148.
+\newblock In {\em Proceedings of the 8th Annual Symposium on Computer
+  Architecture (ISCA)}, pages 135--148.
 
 \end{thebibliography}

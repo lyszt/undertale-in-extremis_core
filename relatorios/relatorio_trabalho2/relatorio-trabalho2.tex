@@ -37,12 +37,13 @@ Comparação entre LocalBP e BiModeBP e a sensibilidade ao padrão da carga}
   complexo, sobre uma carga rica em desvios, um simulador de combate de RPG
   que executa 1.000 partidas automáticas.
   O código assembly do primeiro trabalho foi adaptado para a sintaxe do GCC,
-  compilado em um binário estático RISC-V e simulado no gem5. Do arquivo
-  stats.txt foram extraídas a taxa de erro de predição, o IPC, o tempo de
-  simulação e as instruções descartadas. O BiModeBP reduziu a taxa de erro de 11,27\%
-  para 8,57\%, aumentou o IPC em 3,8\% e cortou em 38\% o trabalho
-  especulativo descartado. Um segundo experimento mostra que essa vantagem
-  depende de quanto a carga é previsível.
+  compilado em um binário estático RISC-V e simulado no gem5 com uma CPU
+  em-ordem. Do arquivo stats.txt foram extraídas a taxa de erro de predição,
+  o IPC, o tempo de simulação e as operações descartadas. O BiModeBP reduziu
+  a taxa de erro de 25,75\% para 21,86\%, aumentou o IPC em 1,8\% e descartou
+  22\% menos operações. Um segundo experimento mostra que uma carga mais
+  aleatória eleva o erro dos dois preditores, mas a vantagem relativa do
+  BiModeBP se mantém.
 \end{resumo}
 
 \section{Introdução}
@@ -53,13 +54,13 @@ que foi buscado especulativamente depois dele e custa uma penalidade de
 vários ciclos \cite{hennessy2017quantitative}. O ganho de um preditor
 depende do padrão de desvios da carga, foco deste trabalho.
 
-Seguindo o Tópico~2 da proposta, sobre branch prediction, o objetivo é
-comparar dois preditores condicionais oferecidos pelo gem5
-\cite{binkert2011gem5}, o
-LocalBP, local e simples, e o BiModeBP, global e complexo. A carga usada é o
+Entre os temas propostos para o trabalho, este aborda o Tópico~2, sobre
+branch prediction, e tem como objetivo comparar dois preditores condicionais
+oferecidos pelo gem5 \cite{binkert2011gem5}, o LocalBP, local e simples, e o
+BiModeBP, global e complexo. A carga usada é o
 algoritmo do Trabalho~1, descrito na Seção~\ref{sec:jogo}. As métricas
 são o total de desvios, os erros de predição, o IPC, o tempo de simulação e
-as instruções descartadas.
+as operações descartadas.
 
 \section{O algoritmo avaliado}
 \label{sec:jogo}
@@ -150,12 +151,11 @@ ele foi adaptado em main\_gem5.s, com as diretivas e o ponto de entrada
 \_start na sintaxe do GCC, e compilado como binário estático com
 {\ttfamily\small riscv64-linux-gnu-gcc -nostdlib -static main\_gem5.s -o
 output/main\_gem5}. A configuração veio de um script Python fornecido pelo
-professor, no qual só o preditor condicional muda entre as rodadas, de
-LocalBP para BiModeBP. O modelo de CPU em-ordem não rodou no ambiente usado,
-então foi usado o modelo fora-de-ordem, também fornecido. Como só o preditor
-muda, a comparação é justa. A seed do jogo vem do relógio, então as
-contagens absolutas mudam um pouco a cada execução e a análise usa taxas,
-que são estáveis.
+professor, ajustado para usar o modelo de CPU em-ordem MinorCPU, como pede o
+Tópico~2, e no qual só o preditor condicional muda entre as rodadas, de
+LocalBP para BiModeBP. Como só o preditor muda, a comparação é justa. A seed
+do jogo vem do relógio, então as contagens absolutas mudam um pouco a cada
+execução e a análise usa taxas, que são estáveis.
 
 \subsection{Duas cargas de trabalho}
 \label{sec:cargas}
@@ -184,43 +184,41 @@ de predição é a razão condIncorrect / condPredicted.
 
 \begin{table}[ht]
 \centering
-\caption{Métricas da carga mista, extraídas do stats.txt.}
+\caption{Métricas da carga mista no MinorCPU, extraídas do stats.txt.}
 \label{tab:metricas}
 \begin{tabular}{lrr}
 \toprule
 Métrica & LocalBP & BiModeBP \\
 \midrule
-Desvios condicionais avaliados & 900.700 & 803.703 \\
-Desvios condicionais incorretos & 101.531 & 68.838 \\
-Taxa de erro de predição & 11,27\% & 8,57\% \\
-IPC & 1,4603 & 1,5165 \\
-Tempo simulado & 7,539\,ms & 7,181\,ms \\
-Instruções efetivadas & 11.009.088 & 10.889.293 \\
-Instruções descartadas & 102.245 & 62.953 \\
+Desvios condicionais avaliados & 606.368 & 575.382 \\
+Desvios condicionais incorretos & 156.136 & 125.793 \\
+Taxa de erro de predição & 25,75\% & 21,86\% \\
+IPC & 0,7731 & 0,7868 \\
+Tempo simulado & 13,969\,ms & 13,808\,ms \\
+Instruções efetivadas & 10.799.891 & 10.864.867 \\
+Operações descartadas & 309.544 & 242.246 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Carga mista}
 
-Os resultados estão na Tabela~\ref{tab:metricas}. O BiModeBP errou 8,57\% dos
-desvios condicionais contra 11,27\% do LocalBP, uma redução relativa de
-24\%. Menos erros significam menos descartes, então o IPC subiu de 1,4603
-para 1,5165, mais 3,8\%, e o tempo caiu 4,7\%. O efeito maior está nas
-instruções descartadas, 62,9 mil no BiModeBP contra 102,2 mil no LocalBP,
-38\% a menos.
+Os resultados estão na Tabela~\ref{tab:metricas}. O BiModeBP errou 21,86\%
+dos desvios condicionais contra 25,75\% do LocalBP, uma redução relativa de
+15\%. Menos erros significam menos descartes, então o IPC subiu de 0,7731
+para 0,7868, mais 1,8\%, e o tempo caiu 1,2\%. O BiModeBP também descartou
+242 mil operações contra 310 mil do LocalBP, 22\% a menos.
 
 \subsection{Sensibilidade ao padrão de desvios da carga}
 \label{sec:sensibilidade}
 
 O experimento foi repetido na carga aleatória da Seção~\ref{sec:cargas}, com
 dois efeitos visíveis na Figura~\ref{fig:wlmis}. Os dois preditores pioram,
-com a taxa de erro subindo de 11,27\% para 12,59\% no LocalBP e de 8,57\%
-para 10,07\% no BiModeBP, pois sortear a ação remove o viés dos desvios e um
-desvio sem viés é imprevisível por construção. Além disso, a vantagem do
-BiModeBP diminui de 24\% para 20\%. Quanto mais aleatória a carga, menor o
-retorno do preditor complexo, cujo ganho vem da estrutura que a
-aleatoriedade elimina.
+com a taxa de erro subindo de 25,75\% para 30,22\% no LocalBP e de 21,86\%
+para 25,65\% no BiModeBP, pois sortear a ação remove o viés dos desvios e um
+desvio sem viés é imprevisível por construção. A vantagem relativa do
+BiModeBP, porém, fica em torno de 15\% nas duas cargas, então a carga
+aleatória é mais difícil para ambos sem anular o ganho do preditor global.
 
 \begin{figure}[ht]
 \centering
@@ -241,7 +239,7 @@ padrão repetido que o histórico global do BiModeBP aprende e que o LocalBP,
 preso a cada desvio isolado, não captura. O Flowey, ao sortear a ação,
 produz desvios sem padrão, que nenhum preditor acerta acima do acaso.
 
-O aumento de 3,8\% no IPC é modesto porque parte das decisões do jogo não
+O aumento de 1,8\% no IPC é modesto porque parte das decisões do jogo não
 tem viés e não pode ser prevista. O BiModeBP extrai ganho apenas da parcela
 previsível, ao custo de um hardware mais complexo.
 
@@ -253,8 +251,8 @@ cargas com desvios correlacionados, como os planos repetidos dos bots, se
 beneficiam de um preditor com histórico global.
 
 O segundo experimento qualifica essa conclusão. Ao tornar as decisões
-puramente aleatórias, os dois preditores pioram e a vantagem do BiModeBP cai
-de 24\% para 20\%.
+puramente aleatórias, os dois preditores erram mais, mas a vantagem relativa
+do BiModeBP se mantém em torno de 15\%.
 
 \bibliographystyle{sbc}
 \bibliography{referencias}

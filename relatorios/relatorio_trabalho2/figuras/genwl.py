@@ -9,10 +9,10 @@ import numpy as np
 workloads = ["Mista", "Aleatória"]
 c_local, c_bimode = "#4C72B0", "#C44E52"
 
-# condPredicted / condIncorrect por (carga, preditor)
-cond_pred = {"local": [900700, 1526991], "bimode": [803703, 1424053]}
-cond_inc  = {"local": [101531, 192211],  "bimode": [68838, 143453]}
-ipc       = {"local": [1.460320, 1.418401], "bimode": [1.516467, 1.479837]}
+# condPredicted / condIncorrect por (carga, preditor) -- MinorCPU (in-order)
+cond_pred = {"local": [606368, 960029], "bimode": [575382, 923544]}
+cond_inc  = {"local": [156136, 290092], "bimode": [125793, 236892]}
+ipc       = {"local": [0.773120, 0.759586], "bimode": [0.786836, 0.773650]}
 
 rate = {k: [100*cond_inc[k][i]/cond_pred[k][i] for i in range(2)] for k in cond_pred}
 # vantagem relativa do BiMode = reducao % da taxa de erro vs LocalBP

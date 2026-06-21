@@ -26,9 +26,8 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# NOTE: MinorCPU crashes on gem5 25.1 RISC-V SE due to a known
-# ActivityRecorder double-decrement bug (activity.cc:78).
-# DerivO3CPU (via stdlib) is used instead with proper cache hierarchy.
+# MinorCPU: modelo de CPU in-order detalhado (pipeline tradicional),
+# usado para o Topico 2 (branch prediction no modo pipeline).
 
 import m5
 from m5.objects import *
@@ -48,7 +47,7 @@ parser.add_argument("--bp", type=str, choices=["local", "bimode"], default="loca
                     help="Preditor de desvios: local (LocalBP) ou bimode (BiModeBP)")
 args = parser.parse_args()
 
-processor = SimpleProcessor(cpu_type=CPUTypes.O3, num_cores=1, isa=ISA.RISCV)
+processor = SimpleProcessor(cpu_type=CPUTypes.MINOR, num_cores=1, isa=ISA.RISCV)
 
 if args.bp == "bimode":
     processor.cores[0].core.branchPred.conditionalBranchPred = BiModeBP()
